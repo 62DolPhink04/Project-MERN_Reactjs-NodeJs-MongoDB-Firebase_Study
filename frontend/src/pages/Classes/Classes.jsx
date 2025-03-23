@@ -42,7 +42,7 @@ const Classes = () => {
     }
 
     axiosSecure
-      .get(`/cart-item/${id}??email=${currentUser.email}`)
+      .get(`/cart-item/${id}??email=${currentUser?.email}`)
       .then((res) => {
         if (res.data.classId === id) {
           return alert("Already Selected!");
@@ -68,7 +68,7 @@ const Classes = () => {
           Classes
         </h1>
       </div>
-      <div className="my-16 w-[90%] mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-8 ">
+      <div className="my-16 w-[90%] mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5  gap-8 ">
         {Classes.map((cls, index) => (
           <div
             onMouseLeave={() => handleHover(null)}

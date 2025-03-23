@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/mainLayout";
 import Classes from "../pages/Classes/Classes";
+import SignleClasses from "../pages/Classes/SignleClasses";
 import Home from "../pages/Home/Home";
 import Instructors from "../pages/Instructors/Instructors";
 import Login from "../user/login";
@@ -30,6 +31,12 @@ export const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register />,
+      },
+      {
+        path: "/classes/:id",
+        element: <SignleClasses />,
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/class/${params.id}`),
       },
     ],
   },

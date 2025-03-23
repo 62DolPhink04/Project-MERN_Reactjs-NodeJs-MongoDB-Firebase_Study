@@ -21,7 +21,7 @@ const Login = () => {
     login(formData.email, formData.password)
       .then(() => {
         alert("Login Successfully");
-        navigate(location.state?.from || "/dashboard");
+        navigate(location.state?.from || "/");
       })
       .catch((err) => {
         setError(err.code);

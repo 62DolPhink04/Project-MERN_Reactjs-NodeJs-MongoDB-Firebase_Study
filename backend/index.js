@@ -12,11 +12,11 @@ app.use(cors());
 
 // verify token
 const verifyJWT = (req, res, next) => {
-  const authorization = req.headers.authorization;
-  if (!authorization) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
     return res.status(401).send({ message: "Invalid authorization" });
   }
-  const token = authorization?.split(" ")[1];
+  const token = authHeader?.split(" ")[1];
   jwt.verify(token, process.env.ACCESS_SECRET, (err, decode) => {
     if (err) {
       return res.status(403).send({ message: "Invalid token" });
@@ -27,7 +27,7 @@ const verifyJWT = (req, res, next) => {
 };
 
 //addmin middleware for admin and instrustor
-const verifyAdmin = async (req, res, nex) => {
+const verifyAdmin = async (req, res, next) => {
   const email = req.decode.email;
   const query = { email: email };
   const user = await usersCollections.findOne(query);
@@ -38,7 +38,7 @@ const verifyAdmin = async (req, res, nex) => {
   }
 };
 
-const verifyInstrustor = async (req, res, nex) => {
+const verifyInstrustor = async (req, res, next) => {
   const email = req.decode.email;
   const query = { email: email };
   const user = await usersCollections.findOne(query);
@@ -74,13 +74,13 @@ async function run() {
     await client.connect();
 
     // create a dabase and collection
-    const databse = client.db("study");
-    const usersCollections = databse.collection("users");
-    const classesCollections = databse.collection("classes");
-    const cartCollections = databse.collection("cart");
-    const paymentCollections = databse.collection("payment");
-    const errolledCollections = databse.collection("errolled");
-    const appliedCollection = databse.collection("applied");
+    const database = client.db("study");
+    const usersCollections = database.collection("users");
+    const classesCollections = database.collection("classes");
+    const cartCollections = database.collection("cart");
+    const paymentCollections = database.collection("payment");
+    const errolledCollections = database.collection("errolled");
+    const appliedCollection = database.collection("applied");
 
     // routers for users
     app.post("/api/set-token", async (req, res) => {
@@ -101,19 +101,46 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/user/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await usersCollections.findOne(query);
-      res.send(result);
+    app.get("/user/:identifier", async (req, res) => {
+      const identifier = req.params.identifier;
+
+      let query = {};
+      if (ObjectId.isValid(identifier)) {
+        // Nếu là ObjectId hợp lệ => Tìm theo ID
+        query = { _id: new ObjectId(identifier) };
+      } else {
+        // Nếu không phải ObjectId => Tìm theo email
+        query = { email: identifier };
+      }
+
+      try {
+        const user = await usersCollections.findOne(query);
+        if (!user) {
+          return res.status(404).send("User not found");
+        }
+        res.send(user);
+      } catch (error) {
+        res.status(500).send("Internal Server Error");
+      }
     });
 
-    app.get("/user/:email", verifyJWT, async (req, res) => {
-      const email = req.params.email;
-      const query = { email: email };
-      const result = await usersCollections.findOne(query);
-      res.send(result);
-    });
+    // app.get("/user/:id", verifyJWT, async (req, res) => {
+    //   const id = req.params.id;
+    //   if (!ObjectId.isValid(id)) {
+    //     return res.status(400).send("Invalid ID format");
+    //   }
+    //   const query = { _id: new ObjectId(id) };
+
+    //   const result = await usersCollections.findOne(query);
+    //   res.send(result);
+    // });
+
+    // app.get("/user/:email", async (req, res) => {
+    //   const email = req.params.email;
+    //   const query = { email: email };
+    //   const result = await usersCollections.findOne(query);
+    //   res.send(result);
+    // });
 
     app.delete("/delete-user/:id", verifyJWT, verifyAdmin, async (req, res) => {
       const id = req.params.id;
@@ -167,7 +194,7 @@ async function run() {
       verifyInstrustor,
       async (req, res) => {
         const email = req.params.email;
-        const query = { instrustorEmail: email };
+        const query = { instructorEmail: email };
         const result = await classesCollections.find(query).toArray();
         res.send(result);
       }
@@ -276,7 +303,7 @@ async function run() {
       const email = req.params.email;
       const query = { UserMail: email };
       const projection = { classId: 1 };
-      const carts = await cartCollections.findO(query, {
+      const carts = await cartCollections.findOne(query, {
         projection: projection,
       });
       const classIds = carts.map((cart) => new ObjectId(cart.classId));
