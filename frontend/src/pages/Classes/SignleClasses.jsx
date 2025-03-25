@@ -3,6 +3,8 @@ import { useLoaderData } from "react-router-dom";
 import bannerImg1 from "../../assets/home/banner-1.jpg";
 
 import useAxiosFetch from "../../hooks/useAxiosFetch";
+// import axiosSecure from "../../hooks/useAxiosSecure";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useUser from "../../hooks/useUser";
 
 import { BiTime } from "react-icons/bi";
@@ -13,6 +15,7 @@ import { MdBookOnline } from "react-icons/md";
 import { FaLanguage, FaLevelUpAlt } from "react-icons/fa";
 
 const SignleClasses = () => {
+  const axiosSecure = useAxiosSecure();
   const course = useLoaderData();
   const { currentUser } = useUser();
   const role = currentUser?.role;
@@ -23,7 +26,7 @@ const SignleClasses = () => {
   const handleSelect = (id) => {
     axiosSecure
       .get(`/enrolled-classes/${currentUser?.email}`)
-      .then((res) => setErrolledClasses(res.data))
+      .then((res) => setEnrolledClasses(res.data))
       .catch((err) => console.log(err));
     if (!currentUser) {
       alert("Please Login First");
@@ -36,7 +39,7 @@ const SignleClasses = () => {
       .then((res) => {
         if (res.data.classId === id) {
           return alert("Already Selected!");
-        } else if (errolledClasses.find((item) => item.Classes._id === id)) {
+        } else if (enrolledClasses.find((item) => item.Classes._id === id)) {
           return alert("Already enrolled");
         } else {
           const data = {
@@ -89,7 +92,7 @@ const SignleClasses = () => {
                           <div className="h-12 w-12 rounded">
                             <img
                               src={
-                                "https://www.google.com/imgres?q=icon&imgurl=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F1%2F12%2FUser_icon_2.svg%2F2048px-User_icon_2.svg.png&imgrefurl=https%3A%2F%2Fvi.m.wikipedia.org%2Fwiki%2FT%25E1%25BA%25ADp_tin%3AUser_icon_2.svg&docid=4bC5LnqF20f4XM&tbnid=HEI2WJ7F-gtP1M&vet=12ahUKEwj-zIas-ZuMAxUcrlYBHa_FCegQM3oECF4QAA..i&w=2048&h=2048&hcb=2&ved=2ahUKEwj-zIas-ZuMAxUcrlYBHa_FCegQM3oECF4QAA"
+                                "https://t4.ftcdn.net/jpg/02/27/45/09/360_F_227450952_KQCMShHPOPebUXklULsKsROk5AvN6H1H.jpg  "
                               }
                               alt=""
                               className="object-cover w-full h-full rounded"
@@ -282,20 +285,21 @@ const SignleClasses = () => {
                         onClick={() => handleSelect(course._id)}
                         title={
                           role === "admin" || role === "instructor"
-                            ? "Instructor/Admin Can not be able to select"
-                              ? course.availableSeats < 1
-                              : "No seat avalible"
-                            : "You can select this classes"
+                            ? "Instructor/Admin cannot select this course"
+                            : course.availableSeats < 1
+                            ? "No seat available"
+                            : "You can select this class"
                         }
-                        disable={
+                        disabled={
                           role === "admin" ||
                           role === "instructor" ||
                           course.availableSeats < 1
                         }
-                        className="btn btn-primary w-full text-center bg-secondary py-2 px-6 text-white"
+                        className="btn btn-primary w-full text-center bg-secondary py-6 px-6 text-white"
                       >
                         Enroll Now
                       </button>
+
                       <ul className="list">
                         <li className="flex space-x-3 border-b border-[#ECECEC] mb-4 pb-4 last:pb-0 past:mb-0 last:border-0">
                           <div className="flex-1 space-x-3 flex items-center">

@@ -1,7 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
+import DashboardLayout from "../layout/DashboardLayout";
 import MainLayout from "../layout/mainLayout";
 import Classes from "../pages/Classes/Classes";
 import SignleClasses from "../pages/Classes/SignleClasses";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import StudentCP from "../pages/Dashboard/Student/studentCP";
 import Home from "../pages/Home/Home";
 import Instructors from "../pages/Instructors/Instructors";
 import Login from "../user/login";
@@ -37,6 +40,23 @@ export const router = createBrowserRouter([
         element: <SignleClasses />,
         loader: ({ params }) =>
           fetch(`http://localhost:3000/class/${params.id}`),
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    children: [
+      // Dashboard routes here
+      {
+        index: true,
+        element: <Dashboard />,
+      },
+
+      //student routes here
+      {
+        path: "student-cp",
+        element: <StudentCP />,
       },
     ],
   },
