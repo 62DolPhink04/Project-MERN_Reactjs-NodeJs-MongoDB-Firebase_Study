@@ -1,10 +1,12 @@
 import { Switch } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import photoUrl from "../../assets/home/girl.jpg";
+import Swal from "sweetalert2";
+import useUser from "../../hooks/useUser";
+import { AuthContext } from "../../ultilities/providers/AuthProvider";
 
 const NavLinks = [
   { name: "Home", router: "/" },
@@ -33,7 +35,8 @@ const NavBar = () => {
   const [isFixed, setIsFixed] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [navBg, setNavBg] = useState("bg-[#15151580]");
-  const user = true;
+  const { logOut, user } = useContext(AuthContext);
+  const { currentUser } = useUser();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -86,11 +89,35 @@ const NavBar = () => {
       );
     }
     // console.log("Scroll:", scrollPosition, "NavBg:", navBg);
-  }, [scrollPosition, isHome, location.pathname]);
+  }, [scrollPosition]);
 
   // logout
-  const handleLogout = () => {
+  const handleLogout = (e) => {
+    e.preventDefault();
     console.log("Logout");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, LogOut it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logOut()
+          .then(() => {
+            Swal.fire({
+              title: "LogOut!",
+              text: "Your successfuly has been LogOut.",
+              icon: "success",
+            });
+          })
+          .catch((err) => {
+            Swal.fire("Error!", err.message, "error");
+          });
+      }
+    });
   };
 
   return (
@@ -224,7 +251,7 @@ const NavBar = () => {
                   {user && (
                     <li>
                       <img
-                        src={photoUrl}
+                        src={currentUser?.photoUrl}
                         className="h-[40px] rounded-full w-[40px]"
                       ></img>
                     </li>

@@ -68,7 +68,8 @@ const Classes = () => {
           Classes
         </h1>
       </div>
-      <div className="my-16 w-[90%] mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5  gap-8 ">
+      {/* set numbers items layout  */}
+      <div className="my-16 w-[90%] mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-8 ">
         {Classes.map((cls, index) => (
           <div
             onMouseLeave={() => handleHover(null)}

@@ -1,53 +1,16 @@
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const app = express();
 require("dotenv").config();
 const stripe = require("stripe")(process.env.PAYMEN_SECRET);
 var jwt = require("jsonwebtoken");
+
 const port = process.env.PORT || 3000;
 
 // middleware
 app.use(express.json());
 app.use(cors());
-
-// verify token
-const verifyJWT = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    return res.status(401).send({ message: "Invalid authorization" });
-  }
-  const token = authHeader?.split(" ")[1];
-  jwt.verify(token, process.env.ACCESS_SECRET, (err, decode) => {
-    if (err) {
-      return res.status(403).send({ message: "Invalid token" });
-    }
-    req.decode = decode;
-    next();
-  });
-};
-
-//addmin middleware for admin and instrustor
-const verifyAdmin = async (req, res, next) => {
-  const email = req.decode.email;
-  const query = { email: email };
-  const user = await usersCollections.findOne(query);
-  if (user.role == "admin") {
-    next();
-  } else {
-    return res.status(401).send({ message: "Not Access" });
-  }
-};
-
-const verifyInstrustor = async (req, res, next) => {
-  const email = req.decode.email;
-  const query = { email: email };
-  const user = await usersCollections.findOne(query);
-  if (user.role == "instrustor") {
-    next();
-  } else {
-    return res.status(401).send({ message: "Not Access" });
-  }
-};
 
 // conect mongodb
 
@@ -81,6 +44,45 @@ async function run() {
     const paymentCollections = database.collection("payment");
     const errolledCollections = database.collection("errolled");
     const appliedCollection = database.collection("applied");
+
+    // verify token
+    const verifyJWT = (req, res, next) => {
+      const authHeader = req.headers.authorization;
+      if (!authHeader) {
+        return res.status(401).send({ message: "Invalid authorization" });
+      }
+      const token = authHeader?.split(" ")[1];
+      jwt.verify(token, process.env.ACCESS_SECRET, (err, decode) => {
+        if (err) {
+          return res.status(403).send({ message: "Invalid token" });
+        }
+        req.decode = decode;
+        next();
+      });
+    };
+
+    //addmin middleware for admin and instrustor
+    const verifyAdmin = async (req, res, next) => {
+      const email = req.decode.email;
+      const query = { email: email };
+      const user = await usersCollections.findOne(query);
+      if (user.role == "admin") {
+        next();
+      } else {
+        return res.status(401).send({ message: "Not Access" });
+      }
+    };
+
+    const verifyInstrustor = async (req, res, next) => {
+      const email = req.decode.email;
+      const query = { email: email };
+      const user = await usersCollections.findOne(query);
+      if (user && user.role === "instrustor") {
+        next();
+      } else {
+        return res.status(401).send({ message: "Not Access" });
+      }
+    };
 
     // routers for users
     app.post("/api/set-token", async (req, res) => {
@@ -175,8 +177,9 @@ async function run() {
     });
 
     // classes router
-    app.post("/new-class", verifyJWT, verifyInstrustor, async (req, res) => {
+    app.post("/new-class", async (req, res) => {
       const newClass = req.body;
+      newClass.availiableSeats = parseInt(newClass.availiableSeats);
       const result = await classesCollections.insertOne(newClass);
       res.send(result);
     });
@@ -299,15 +302,53 @@ async function run() {
     });
 
     // get info cart items by  users email
+    // app.get("/cart/:email", verifyJWT, async (req, res) => {
+    //   const email = req.params.email;
+    //   const query = { UseMail: email };
+    //   const projection = { classId: 1 };
+    //   const carts = await cartCollections.findOne(query, {
+    //     projection: projection,
+    //   });
+    //   // const classIds = carts?.map((cart) => new ObjectId(cart.classId));
+    //   // const query2 = { _id: { $in: classIds } };
+    //   // const result2 = await classesCollections.find(query2).toArray();
+    //   // res.send(result2);
+    //   const classIds = carts?.map((cart) => cart.classId).filter((id) => id); // Lọc ra id hợp lệ
+
+    //   // Đảm bảo classIds là mảng trước khi query
+    //   if (!Array.isArray(classIds) || classIds.length === 0) {
+    //     return res.send([]);
+    //   }
+
+    //   // Convert to ObjectId
+    //   const objectIds = classIds.map((id) => new ObjectId(id));
+
+    //   const query2 = { _id: { $in: objectIds } };
+    //   const result2 = await classesCollections.find(query2).toArray();
+    //   res.send(result2);
+    // });
+
     app.get("/cart/:email", verifyJWT, async (req, res) => {
       const email = req.params.email;
-      const query = { UserMail: email };
+      const query = { useMail: email }; // Dùng userEmail thay vì useMail
       const projection = { classId: 1 };
-      const carts = await cartCollections.findOne(query, {
-        projection: projection,
-      });
-      const classIds = carts.map((cart) => new ObjectId(cart.classId));
-      const query2 = { _id: { $in: classIds } };
+
+      const carts = await cartCollections
+        .find(query, {
+          projection: projection,
+        })
+        .toArray(); // Lấy mảng thay vì findOne
+
+      const classIds = carts.map((cart) => cart.classId).filter((id) => id); // Lọc id hợp lệ
+
+      if (!Array.isArray(classIds) || classIds.length === 0) {
+        return res.send([]);
+      }
+
+      // Convert to ObjectId
+      const objectIds = classIds.map((id) => new ObjectId(id));
+
+      const query2 = { _id: { $in: objectIds } };
       const result2 = await classesCollections.find(query2).toArray();
       res.send(result2);
     });
@@ -321,17 +362,50 @@ async function run() {
     });
 
     // payment router
+    // app.post("/create-payment-intent", async (req, res) => {
+    //   const { price } = req.body;
+    //   const amount = parseInt(price) * 100;
+    //   const paymentIntent = await stripe.paymentIntents.create({
+    //     amount: amount,
+    //     currency: "usd",
+    //     payment_method_types: ["card"],
+    //   });
+    //   res.send({
+    //     clientSecret: paymentIntent.client_secret,
+    //   });
+    // });
+
     app.post("/create-payment-intent", async (req, res) => {
-      const { price } = req.body;
-      const amount = parseInt(price) * 100;
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: amount,
-        currency: "usd",
-        payment_method_types: ["card"],
-      });
-      res.send({
-        clientSecret: paymentIntent.client_secret,
-      });
+      try {
+        const { price } = req.body;
+        if (!price || isNaN(price)) {
+          return res.status(400).send({ error: "Invalid price value" });
+        }
+
+        const amount = parseInt(price) * 100;
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: amount,
+          currency: "usd",
+          payment_method_types: ["card"],
+        });
+        console.log(
+          "🔥 Client Secret gửi về frontend:",
+          paymentIntent.client_secret
+        );
+
+        // console.log("🔥 Tạo Payment Intent thành công:", paymentIntent.id);
+        // console.log(
+        //   "🔥 Client Secret gửi về frontend:",
+        //   paymentIntent.client_secret
+        // );
+        // console.log("PaymentIntent Created:", paymentIntent.id);
+        // console.log("Client Secret:", paymentIntent.client_secret);
+        res.send({
+          clientSecret: paymentIntent.client_secret,
+        });
+      } catch (error) {
+        res.status(500).send({ error: error.message });
+      }
     });
 
     // post payment info to db
@@ -494,9 +568,11 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/errolled-classes/:email", verifyJWT, async (req, res) => {
+    app.get("/enrolled-classes/:email", verifyJWT, async (req, res) => {
       const email = req.params.email;
       const query = { userEmail: email };
+      console.log("Email nhận vào:", email);
+      console.log("Truy vấn MongoDB:", query);
       const pipeline = [
         {
           $match: query,

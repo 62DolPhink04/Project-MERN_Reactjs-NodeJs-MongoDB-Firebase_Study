@@ -41,18 +41,18 @@ const useUser = () => {
   } = useQuery({
     queryKey: ["user", user?.email],
     queryFn: async () => {
-      console.log(
-        "isLoading:",
-        isLoading,
-        "isError:",
-        isError,
-        "currentUser:",
-        currentUser
-      );
+      // console.log(
+      //   "isLoading:",
+      //   isLoading,
+      //   "isError:",
+      //   isError,
+      //   "currentUser:",
+      //   currentUser
+      // );
 
-      console.log("useQuery is running...");
+      // console.log("useQuery is running...");
       const token = await user.getIdToken();
-      console.log("Access Token:", token);
+      // console.log("Access Token:", token);
       const res = await axios.get(`http://localhost:3000/user/${user.email}`, {
         timeout: 5000,
         headers: {
@@ -60,7 +60,7 @@ const useUser = () => {
         },
       }); // Timeout 5 giây
 
-      console.log("Response from server:", res.data);
+      // console.log("Response from server:", res.data);
 
       return res.data;
     },
@@ -82,7 +82,7 @@ const useUser = () => {
   //   enabled: !!user?.email && !!localStorage.getItem("token"),
   // });
 
-  console.log("Current User:", currentUser);
+  // console.log("Current User:", currentUser);
 
   return { currentUser, isLoading, isError };
 };
