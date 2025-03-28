@@ -154,6 +154,9 @@ async function run() {
     app.put("/update-user/:id", async (req, res) => {
       const id = req.params.id;
       const updateUser = req.body;
+
+      console.log("Received data:", updateUser); // Kiểm tra dữ liệu từ frontend
+
       const filter = { _id: new ObjectId(id) };
       const options = { upsert: true };
       const updateDoc = {
@@ -161,18 +164,22 @@ async function run() {
           name: updateUser.name,
           email: updateUser.email,
           password: updateUser.password,
-          role: updateUser.role,
+          role: updateUser.role || updateUser.option, // Kiểm tra nếu updateUser.role có giá trị hợp lệ
           address: updateUser.address,
           about: updateUser.about,
           photoUrl: updateUser.photoUrl,
           skills: updateUser.skills ? updateUser.skills : null,
         },
       };
+
       const result = await usersCollections.updateOne(
         filter,
         updateDoc,
+        { returnDocument: "after" },
         options
       );
+      console.log("MongoDB update result:", result); // Kiểm tra phản hồi từ MongoDB
+
       res.send(result);
     });
 
