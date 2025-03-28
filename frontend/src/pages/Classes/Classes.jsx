@@ -114,7 +114,7 @@ const Classes = () => {
                       role === "instructor" ||
                       cls.availableSeats < 1
                     }
-                    className="px-4 py-2 text-white disabled:bg-red-300 bg-secondary duration-300 rounded hover:bg-red-700"
+                    className="px-1 py-2 text-white disabled:bg-red-300 bg-secondary duration-300 rounded hover:bg-red-700"
                   >
                     Add to cart
                   </button>

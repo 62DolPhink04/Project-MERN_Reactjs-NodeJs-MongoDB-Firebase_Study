@@ -183,46 +183,25 @@ const UpdateClass = () => {
               className="w-full border-secondary px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-500"
             />
           </div>
+        </div>
 
-          <div>
-            <div className="mb-6">
-              <label
-                className="block text-gray-700 font-bold mb-2"
-                htmlFor="status"
-              >
-                Status
-              </label>
-              <select
-                className="w-full p-2 border-2 border-blue-500 rounded-lg focus:border-blue-700 focus:ring focus:ring-blue-200 transition"
-                value={formData.status}
-                onChange={(e) =>
-                  setFormData({ ...formData, status: e.target.value })
-                }
-              >
-                <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
-                <option value="done">Done</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="mb-6">
-            <label
-              className="block text-gray-700 font-bold mb-2"
-              htmlFor="videolink"
-            >
-              Youtube Link
-            </label>
-            <input
-              type="text"
-              name="videolink"
-              value={formData.videolink}
-              onChange={(e) =>
-                setFormData({ ...formData, videolink: e.target.value })
-              }
-              className="w-full border-secondary px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-500"
-            />
-          </div>
+        <div className="mb-6">
+          <label
+            className="block text-gray-700 font-bold mb-2"
+            htmlFor="videolink"
+          >
+            Youtube Link
+          </label>
+          <input
+            type="text"
+            placeholder="Enter link youtube"
+            name="videolink"
+            value={formData.videolink}
+            onChange={(e) =>
+              setFormData({ ...formData, videolink: e.target.value })
+            }
+            className="w-full border-secondary px-4 py-2 border rounded-md focus:outline-none focus:ring-blue-500"
+          />
         </div>
 
         <div className="mb-6">

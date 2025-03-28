@@ -17,11 +17,11 @@ const Hero = () => {
             <div className="md:w-1/2">
               <p>1 câu giới thiệu</p>
             </div>
-            <div className="flex flex-wrap items-center gap-5">
-              <button className="px-7 py-3 rounded-lg bg-secondary font-bold uppercase">
-                Join Day
+            <div className="flex items-center gap-4">
+              <button className="px-5 py-2 rounded-lg bg-blue-600 text-white font-bold uppercase hover:bg-blue-700 w-auto">
+                Join Today
               </button>
-              <button className="px-7 py-3 rounded-lg border hover:bg-secondary font-bold uppercase">
+              <button className="px-5 py-2 rounded-lg border bg-transparent hover:bg-secondary border-gray-400 text-gray-700 font-bold uppercase hover:border-gray-600 w-auto">
                 View Course
               </button>
             </div>
