@@ -196,11 +196,11 @@ const ManageClass = () => {
                               }
                               {
                                 <button
-                                  disabled={
-                                    cls.status === "rejected" ||
-                                    cls.status === "checking"
-                                  }
-                                  onClick={() => handleReject(cls._id)}
+                                  // disabled={
+                                  //   cls.status === "rejected" ||
+                                  //   cls.status === "checking"
+                                  // }
+                                  onClick={() => handleFeedback(cls._id)}
                                   className="cursor-pointer bg-red-600 py-1 rounded-md px-2 text-white"
                                 >
                                   Feedback

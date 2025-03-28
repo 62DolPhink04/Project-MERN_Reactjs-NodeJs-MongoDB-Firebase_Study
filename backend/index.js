@@ -126,32 +126,32 @@ async function run() {
       }
     });
 
-    // app.get("/user/:id", verifyJWT, async (req, res) => {
-    //   const id = req.params.id;
-    //   if (!ObjectId.isValid(id)) {
-    //     return res.status(400).send("Invalid ID format");
-    //   }
-    //   const query = { _id: new ObjectId(id) };
+    app.get("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      if (!ObjectId.isValid(id)) {
+        return res.status(400).send("Invalid ID format");
+      }
+      const query = { _id: new ObjectId(id) };
 
-    //   const result = await usersCollections.findOne(query);
-    //   res.send(result);
-    // });
+      const result = await usersCollections.findOne(query);
+      res.send(result);
+    });
 
-    // app.get("/user/:email", async (req, res) => {
-    //   const email = req.params.email;
-    //   const query = { email: email };
-    //   const result = await usersCollections.findOne(query);
-    //   res.send(result);
-    // });
+    app.get("/user/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await usersCollections.findOne(query);
+      res.send(result);
+    });
 
-    app.delete("/delete-user/:id", verifyJWT, verifyAdmin, async (req, res) => {
+    app.delete("/delete-user/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await usersCollections.deleteOne(query);
       res.send(result);
     });
-
-    app.put("/update-user/:id", verifyJWT, verifyAdmin, async (req, res) => {
+    // , verifyJWT, verifyAdmin,
+    app.put("/update-user/:id", async (req, res) => {
       const id = req.params.id;
       const updateUser = req.body;
       const filter = { _id: new ObjectId(id) };

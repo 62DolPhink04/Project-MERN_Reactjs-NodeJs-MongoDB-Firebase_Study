@@ -11,6 +11,7 @@ import AdminCP from "../pages/Dashboard/Admin/AdminCP";
 import ManageApplications from "../pages/Dashboard/Admin/ManageApplications";
 import ManageClass from "../pages/Dashboard/Admin/ManageClass";
 import ManageUser from "../pages/Dashboard/Admin/ManageUser";
+import UpdateAccount from "../pages/Dashboard/Admin/UpdateAccount";
 import MyApproved from "../pages/Dashboard/Instructor/MyApproved";
 import MyClasses from "../pages/Dashboard/Instructor/MyClasses";
 import PendingCourse from "../pages/Dashboard/Instructor/PendingCourse";
@@ -148,6 +149,12 @@ export const router = createBrowserRouter([
       {
         path: "manage-applications",
         element: <ManageApplications />,
+      },
+      {
+        path: "update-user/:id",
+        element: <UpdateAccount />,
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/users/${params.id}`),
       },
     ],
   },
