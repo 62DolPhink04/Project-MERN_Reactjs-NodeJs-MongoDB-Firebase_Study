@@ -251,33 +251,92 @@ async function run() {
     });
 
     // update class detail
+    // app.put(
+    //   "/update-class/:id",
+    //   verifyJWT,
+    //   verifyInstrustor,
+    //   async (req, res) => {
+    //     const id = req.params.id;
+    //     const updateClass = req.body;
+    //     const filter = { _id: new ObjectId(id) };
+    //     const options = { upsert: true };
+    //     const updateDoc = {
+    //       $set: {
+    //         name: updateClass.name,
+    //         description: updateClass.description,
+    //         price: updateClass.price,
+    //         availableSeats: updateClass.availableSeats,
+    //         videoLink: updateClass.videoLink,
+    //         status: "pending",
+    //       },
+    //     };
+    //     const result = await classesCollections.updateOne(
+    //       filter,
+    //       updateDoc,
+    //       options
+    //     );
+    //     res.send(result);
+    //   }
+    // );
+
     app.put(
       "/update-class/:id",
-      verifyJWT,
-      verifyInstrustor,
+      // verifyJWT,
+      // verifyInstrustor,
       async (req, res) => {
-        const id = req.params.id;
-        const updateClass = req.body;
-        const filter = { _id: new ObjectId(id) };
-        const options = { upsert: true };
-        const updateDoc = {
-          $set: {
-            name: updateClass.name,
-            description: updateClass.description,
-            price: updateClass.price,
-            availiableSeats: updateClass.availiableSeats,
-            videoLink: updateClass.videoLink,
-            status: "pending",
-          },
-        };
-        const result = await classesCollections.updateOne(
-          filter,
-          updateDoc,
-          options
-        );
-        res.send(result);
+        try {
+          const id = req.params.id;
+          const updateClass = req.body;
+          const filter = { _id: new ObjectId(id) };
+
+          const updateDoc = {
+            $set: {
+              name: updateClass.name,
+              description: updateClass.description,
+              price: updateClass.price,
+              availableSeats: updateClass.availableSeats, // Sửa chính tả
+              videoLink: updateClass.videoLink,
+              image: updateClass.image, // Cập nhật ảnh nếu có
+              status: "pending",
+            },
+          };
+
+          const result = await classesCollections.updateOne(filter, updateDoc);
+
+          if (result.modifiedCount > 0) {
+            res.json({ success: true, message: "Class updated successfully!" });
+          } else {
+            res.json({ success: false, message: "No changes detected!" });
+          }
+        } catch (error) {
+          console.error("Error updating class:", error);
+          res
+            .status(500)
+            .json({ success: false, message: "Internal server error" });
+        }
       }
     );
+
+    // xóa classes
+    app.delete("/delete-classes/:id", async (req, res) => {
+      try {
+        const classId = req.params.id;
+        const filter = { _id: new ObjectId(classId) };
+
+        const result = await classesCollections.deleteOne(filter);
+
+        if (result.deletedCount > 0) {
+          res.json({ success: true, message: "Class deleted successfully!" });
+        } else {
+          res.status(404).json({ success: false, message: "Class not found!" });
+        }
+      } catch (error) {
+        console.error("Error deleting class:", error);
+        res
+          .status(500)
+          .json({ success: false, message: "Internal server error" });
+      }
+    });
 
     // cart Router
     app.post("/add-to-cart", verifyJWT, async (req, res) => {

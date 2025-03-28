@@ -10,6 +10,7 @@ import InstructorCP from "../pages/Dashboard/Instructor/InstructorCP";
 import MyApproved from "../pages/Dashboard/Instructor/MyApproved";
 import MyClasses from "../pages/Dashboard/Instructor/MyClasses";
 import PendingCourse from "../pages/Dashboard/Instructor/PendingCourse";
+import UpdateClass from "../pages/Dashboard/Instructor/UpdateClass";
 import ApplyInstructor from "../pages/Dashboard/Student/apply/ApplyInstructor";
 import EnrolledClasses from "../pages/Dashboard/Student/Enroll/EnrolledClasses";
 import Payment from "../pages/Dashboard/Student/Payment/History/Payment";
@@ -117,6 +118,10 @@ export const router = createBrowserRouter([
       {
         path: "my-approved",
         element: <MyApproved />,
+      },
+      {
+        path: "update/:id",
+        element: <UpdateClass />, // Thêm route cho UpdateClass
       },
     ],
   },
