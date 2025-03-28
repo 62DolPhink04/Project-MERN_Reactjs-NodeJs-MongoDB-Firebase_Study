@@ -210,10 +210,10 @@ async function run() {
     });
 
     // update classes status and reason
-    app.patch(
+    app.put(
       "/change-status/:id",
-      verifyJWT,
-      verifyAdmin,
+      // verifyJWT,
+      // verifyAdmin,
       async (req, res) => {
         const id = req.params.id;
         const status = req.body.status;
@@ -594,16 +594,19 @@ async function run() {
     });
 
     //admin status
-    app.get("/admin-status", verifyJWT, verifyAdmin, async (req, res) => {
+    app.get("/admin-stats", async (req, res) => {
       const approvedClasses = (
         await (await classesCollections.find({ status: "approved" })).toArray()
       ).length;
       const pendingClasses = (
         await (await classesCollections.find({ status: "pending" })).toArray()
       ).length;
-      const intrustor = (
-        await usersCollections.find({ role: "intrustor" })
-      ).toArray().length;
+      const instructorsList = await usersCollections
+        .find({ role: "instructor" })
+        .toArray();
+      console.log("Instructors:", instructorsList);
+      const instructorCount = instructorsList.length;
+
       const totalClasses = (await (await classesCollections.find()).toArray())
         .length;
       const totalEnrolled = (await (await errolledCollections.find()).toArray())
@@ -612,7 +615,7 @@ async function run() {
       const result = {
         approvedClasses,
         pendingClasses,
-        intrustor,
+        instructorCount,
         totalClasses,
         totalEnrolled,
       };

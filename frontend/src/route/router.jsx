@@ -7,6 +7,10 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import AddClass from "../pages/Dashboard/Instructor/AddClass";
 import InstructorCP from "../pages/Dashboard/Instructor/InstructorCP";
 
+import AdminCP from "../pages/Dashboard/Admin/AdminCP";
+import ManageApplications from "../pages/Dashboard/Admin/ManageApplications";
+import ManageClass from "../pages/Dashboard/Admin/ManageClass";
+import ManageUser from "../pages/Dashboard/Admin/ManageUser";
 import MyApproved from "../pages/Dashboard/Instructor/MyApproved";
 import MyClasses from "../pages/Dashboard/Instructor/MyClasses";
 import PendingCourse from "../pages/Dashboard/Instructor/PendingCourse";
@@ -16,7 +20,7 @@ import EnrolledClasses from "../pages/Dashboard/Student/Enroll/EnrolledClasses";
 import Payment from "../pages/Dashboard/Student/Payment/History/Payment";
 import PaymentHistory from "../pages/Dashboard/Student/Payment/MyPaymentHistory";
 import SelectedClass from "../pages/Dashboard/Student/SelectedClass";
-import StudentCP from "../pages/Dashboard/Student/studentCP";
+import StudentCP from "../pages/Dashboard/Student/StudentCP";
 import Home from "../pages/Home/Home";
 import Instructors from "../pages/Instructors/Instructors";
 import Login from "../user/login";
@@ -121,7 +125,29 @@ export const router = createBrowserRouter([
       },
       {
         path: "update/:id",
-        element: <UpdateClass />, // Thêm route cho UpdateClass
+        element: <UpdateClass />,
+      },
+      {
+        path: "class/:id", // Route chi tiết lớp học
+        element: <SignleClasses />,
+      },
+
+      // Admin routes here
+      {
+        path: "admin-home",
+        element: <AdminCP />,
+      },
+      {
+        path: "manage-users",
+        element: <ManageUser />,
+      },
+      {
+        path: "manage-class",
+        element: <ManageClass />,
+      },
+      {
+        path: "manage-applications",
+        element: <ManageApplications />,
       },
     ],
   },

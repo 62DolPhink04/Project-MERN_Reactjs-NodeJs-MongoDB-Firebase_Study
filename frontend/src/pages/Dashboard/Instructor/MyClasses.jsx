@@ -103,7 +103,10 @@ const MyClasses = () => {
                         >
                           View FeedBack
                         </button>
-                        <button className="px-3 bg-green-500 font-bold py-1 text-white rounded-lg">
+                        <button
+                          className="px-3 bg-green-500 font-bold py-1 text-white rounded-lg"
+                          onClick={() => navigate(`/classes/${cls._id}`)}
+                        >
                           View Details
                         </button>
                         <button

@@ -92,7 +92,10 @@ const PendingClasses = () => {
                         >
                           View FeedBack
                         </button>
-                        <button className="px-3 bg-green-500 font-bold py-1 text-white rounded-lg">
+                        <button
+                          onClick={() => navigate(`/classes/${cls._id}`)}
+                          className="px-3 bg-green-500 font-bold py-1 text-white rounded-lg"
+                        >
                           View Details
                         </button>
                         <button
