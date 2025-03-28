@@ -193,8 +193,8 @@ async function run() {
     //classes by email
     app.get(
       "/classes/:email",
-      verifyJWT,
-      verifyInstrustor,
+      // verifyJWT,
+      // verifyInstrustor,
       async (req, res) => {
         const email = req.params.email;
         const query = { instructorEmail: email };

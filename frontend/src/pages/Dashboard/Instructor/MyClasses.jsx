@@ -11,6 +11,7 @@ const MyClasses = () => {
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
+    // console.log("Current User:", currentUser);
     axiosSecure
       .get(`/classes/${currentUser?.email}`)
       .then((res) => setClasses(res.data))
@@ -40,7 +41,7 @@ const MyClasses = () => {
                 key={index}
                 className="mb-5 hover:ring ring-secondary duration-200 focus:ring rounded-lg"
               >
-                <div className="bg-white flex rounded-lg gap-8 shadow p-4 ">
+                <div className="bg-white flex rounded-lg gap-8 shadow p-4">
                   <div>
                     <img
                       src={cls.image}
@@ -48,22 +49,23 @@ const MyClasses = () => {
                       className="max-h-[200px] max-w-[300px]"
                     />
                   </div>
-                  <div className="w-full">
-                    <h2 className="text-[12px] font-bold text-secondary border-b pb-2 mb-2">
-                      {cls.name}
-                    </h2>
-                    <div>
-                      <div>
-                        <h1 className="font-bold mb-3">Some info: </h1>
-                        <h1 className="text-secondary my-2">
+                  <div className="flex justify-between w-full">
+                    {/* Phần thông tin chính */}
+                    <div className="flex-1">
+                      <h2 className="text-[12px] font-bold text-secondary border-b pb-2 mb-2">
+                        {cls.name}
+                      </h2>
+                      <div className="mb-4">
+                        <h1 className="font-bold mb-3">Some info:</h1>
+                        <p className="text-secondary my-2">
                           <span className="text-black">Total Student</span> :{" "}
                           {cls.totalEnrolled ? cls.totalEnrolled : 0}
-                        </h1>
-                        <h1 className="text-secondary">
+                        </p>
+                        <p className="text-secondary">
                           <span className="text-black">Total Seats</span> :{" "}
                           {cls.availableSeats}
-                        </h1>
-                        <h1 className="text-secondary my-2">
+                        </p>
+                        <p className="text-secondary my-2">
                           <span className="text-black">Status</span> :{" "}
                           <span
                             className={`font-bold ${
@@ -78,43 +80,40 @@ const MyClasses = () => {
                           >
                             {cls.status}
                           </span>
-                        </h1>
-                      </div>
-                      <div className="">
-                        <h1 className="font-bold mb-3">......</h1>
-                        <h1 className="text-secondary my-2">
-                          {" "}
+                        </p>
+                        <p className="text-secondary my-2">
                           <span className="text-black">Price</span> :{" "}
                           {cls.price} <span className="text-black">$</span>
-                        </h1>
-                        <h1 className="text-secondary my-2">
+                        </p>
+                        <p className="text-secondary my-2">
                           <span className="text-black">Submitted</span> :{" "}
-                          <span className="">
-                            {cls.submitted
-                              ? moment(cls.submitted).format("MMMM Do, YYYY")
-                              : "Not get data"}
-                          </span>
-                        </h1>
-                        <div className="w-1/3">
-                          <h1 className="font-bold mb-3">Action:</h1>
-                          <button
-                            className="px-3 bg-orange-400 font-bold py-1 text-white w-full rounded-lg"
-                            onClick={() => handleFeeback(cls._id)}
-                          >
-                            View FeedBack
-                          </button>
-                          <button className="px-3 bg-green-500 font-bold py-1 text-white w-full my-3 rounded-lg">
-                            View Details
-                          </button>
-                          <button
-                            className="px-3 bg-secondary font-bold py-1 text-white rounded-lg"
-                            onClick={() =>
-                              navigate(`/dashboard/update/${cls._id}`)
-                            }
-                          >
-                            Update
-                          </button>
-                        </div>
+                          {cls.submitted
+                            ? moment(cls.submitted).format("MMMM Do, YYYY")
+                            : "Not get data"}
+                        </p>
+                      </div>
+                    </div>
+                    {/* Phần Action */}
+                    <div className="w-1/4">
+                      <h1 className="font-bold mb-2">Action:</h1>
+                      <div className="flex flex-col gap-3">
+                        <button
+                          className="px-3 bg-orange-400 font-bold py-1 text-white rounded-lg"
+                          onClick={() => handleFeeback(cls._id)}
+                        >
+                          View FeedBack
+                        </button>
+                        <button className="px-3 bg-green-500 font-bold py-1 text-white rounded-lg">
+                          View Details
+                        </button>
+                        <button
+                          className="px-3 bg-secondary font-bold py-1 text-white rounded-lg"
+                          onClick={() =>
+                            navigate(`/dashboard/update/${cls._id}`)
+                          }
+                        >
+                          Update
+                        </button>
                       </div>
                     </div>
                   </div>

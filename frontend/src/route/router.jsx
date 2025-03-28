@@ -7,7 +7,9 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import AddClass from "../pages/Dashboard/Instructor/AddClass";
 import InstructorCP from "../pages/Dashboard/Instructor/InstructorCP";
 
+import MyApproved from "../pages/Dashboard/Instructor/MyApproved";
 import MyClasses from "../pages/Dashboard/Instructor/MyClasses";
+import PendingCourse from "../pages/Dashboard/Instructor/PendingCourse";
 import ApplyInstructor from "../pages/Dashboard/Student/apply/ApplyInstructor";
 import EnrolledClasses from "../pages/Dashboard/Student/Enroll/EnrolledClasses";
 import Payment from "../pages/Dashboard/Student/Payment/History/Payment";
@@ -107,6 +109,14 @@ export const router = createBrowserRouter([
       {
         path: "my-classes",
         element: <MyClasses />,
+      },
+      {
+        path: "my-pedding",
+        element: <PendingCourse />,
+      },
+      {
+        path: "my-approved",
+        element: <MyApproved />,
       },
     ],
   },
