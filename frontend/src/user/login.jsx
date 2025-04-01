@@ -53,6 +53,7 @@ const Login = () => {
                 type="email"
                 name="email"
                 placeholder="Enter email"
+                required
                 className="w-full border outline-none rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
               />
               {/* icon email  */}
@@ -71,6 +72,7 @@ const Login = () => {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Enter password"
+                  required
                   className="w-full border outline-none rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                 />
                 {/* icon email  */}

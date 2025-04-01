@@ -16,7 +16,7 @@ const Card = ({ item }) => {
         <p className="text-gray-600 mb-2">Available Seats:{availableSeats}</p>
         <p className="text-gray-600 mb-2">Price:{price}</p>
         <p className="text-gray-600 mb-2">Total Students:{totalEnrolled}</p>
-        <Link to={`class/${_id}`} className="text-center mt-2">
+        <Link to={`classes/${_id}`} className="text-center mt-2">
           <button className="px-2 w-full py-1 bg-secondary rounded-xl text-white font-bold mt-2">
             Select
           </button>
