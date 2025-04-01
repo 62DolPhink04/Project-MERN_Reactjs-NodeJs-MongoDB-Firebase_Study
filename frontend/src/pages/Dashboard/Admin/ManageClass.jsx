@@ -96,6 +96,20 @@ const ManageClass = () => {
       }
     }
   };
+  const handlePending = (id) => {
+    axiosSecure
+      .put(`/change-status/${id}`, { status: "pending" })
+      .then((res) => {
+        console.log(res.data);
+        alert("Course Approved successfully!");
+        const newClass = classes.map((cls) =>
+          cls._id === id ? { ...cls, status: "pending" } : cls
+        );
+        setClasses(newClass);
+        window.location.reload();
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div>
@@ -184,6 +198,18 @@ const ManageClass = () => {
                               }
                               {
                                 <button
+                                  // disabled={
+                                  //   cls.status === "rejected" ||
+                                  //   cls.status === "checking"
+                                  // }
+                                  onClick={() => handlePending(cls._id)}
+                                  className="cursor-pointer bg-blue-600 py-1 rounded-md px-2 text-white"
+                                >
+                                  Pending
+                                </button>
+                              }
+                              {
+                                <button
                                   disabled={
                                     cls.status === "rejected" ||
                                     cls.status === "checking"
@@ -192,18 +218,6 @@ const ManageClass = () => {
                                   className="cursor-pointer disabled:bg-red-800 bg-red-600 rounded-md px-2 text-white"
                                 >
                                   Deny
-                                </button>
-                              }
-                              {
-                                <button
-                                  // disabled={
-                                  //   cls.status === "rejected" ||
-                                  //   cls.status === "checking"
-                                  // }
-                                  onClick={() => handleFeedback(cls._id)}
-                                  className="cursor-pointer bg-red-600 py-1 rounded-md px-2 text-white"
-                                >
-                                  Feedback
                                 </button>
                               }
                             </div>

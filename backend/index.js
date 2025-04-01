@@ -629,6 +629,21 @@ async function run() {
       res.send(result);
     });
 
+    //admin manage cart
+    app.get("/api/manage-cart", async (req, res) => {
+      try {
+        // Tìm tất cả các user đã có lớp học trong cart của họ
+        const usersWithClassesInCart = await Cart.find()
+          .populate("userId", "email username") // Ví dụ populate để lấy thông tin người dùng
+          .exec();
+
+        res.json(usersWithClassesInCart); // Trả dữ liệu về cho client
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        res.status(500).json({ message: "Lỗi khi lấy dữ liệu" });
+      }
+    });
+
     // get all intrustors
     app.get("/instructors", async (req, res) => {
       const result = await usersCollections

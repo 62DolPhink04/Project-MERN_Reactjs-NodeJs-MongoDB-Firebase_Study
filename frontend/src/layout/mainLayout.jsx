@@ -51,12 +51,15 @@ const mainLayout = () => {
           </div>
           <div>
             <h3 className="text-lg font-bold">Start now</h3>
-            <button className="bg-yellow-500 text-black font-bold py-2 px-4 rounded mt-2">
-              Create an account
-            </button>
+            <a href="http://localhost:5173/register">
+              <button className="bg-yellow-500 text-black font-bold py-2 px-4 rounded mt-2">
+                Create an account
+              </button>
+            </a>
+
             <p className="mt-2">
               Already a member?{" "}
-              <a href="#" className="text-blue-400">
+              <a href="http://localhost:5173/login" className="text-blue-400">
                 Log in
               </a>
             </p>
