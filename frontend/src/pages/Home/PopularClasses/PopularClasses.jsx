@@ -21,7 +21,10 @@ const PopularClasses = () => {
         Our <span className="text-secondary">Popular</span> Classes
       </h1>
       <div className="w-[40%] text-center mx-auto my-4">
-        <p className="text-gray-500">1 câu nào đó </p>
+        <p className="text-gray-500">
+          Our popular class offers a dynamic and immersive learning experience
+          tailored to your needs{" "}
+        </p>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">

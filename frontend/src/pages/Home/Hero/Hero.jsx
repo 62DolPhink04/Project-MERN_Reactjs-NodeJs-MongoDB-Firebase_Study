@@ -15,7 +15,10 @@ const Hero = () => {
               Best Study Course Online
             </h1>
             <div className="md:w-1/2">
-              <p>1 câu giới thiệu</p>
+              <p>
+                This online course helps you access quality knowledge, practice
+                effectively, and develop skills flexibly anytime, anywhere
+              </p>
             </div>
             <div className="flex items-center gap-4">
               <button className="px-5 py-2 rounded-lg bg-blue-600 text-white font-bold uppercase hover:bg-blue-700 w-auto">

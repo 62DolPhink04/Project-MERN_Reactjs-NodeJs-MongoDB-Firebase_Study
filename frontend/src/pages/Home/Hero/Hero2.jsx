@@ -13,13 +13,18 @@ const Hero2 = () => {
             <h3 className="md:text-4xl text-2xl">Best Online</h3>
             <h1 className="md:text-7xl text-4xl font-bold">Course From Home</h1>
             <div className="md:w-1/2">
-              <p>1 câu giới thiệu</p>
+              <p>
+                With expert-led lessons and interactive content, this course
+                ensures an engaging and effective learning experience
+              </p>
             </div>
             <div className="flex flex-wrap items-center gap-5">
-              <button className="px-7 py-3 rounded-lg bg-secondary font-bold uppercase">
-                Join Day
+              {/* Nút Join Today */}
+              <button className="px-7 py-3 rounded-lg bg-blue-600 font-bold uppercase w-auto inline-block">
+                Join Today
               </button>
-              <button className="px-7 py-3 rounded-lg border hover:bg-secondary font-bold uppercase">
+              {/* Nút View Course */}
+              <button className="px-7 py-3 rounded-lg border bg-transparent border-gray-400 text-gray-400 opacity-60 hover:bg-secondary font-bold uppercase w-auto inline-block">
                 View Course
               </button>
             </div>

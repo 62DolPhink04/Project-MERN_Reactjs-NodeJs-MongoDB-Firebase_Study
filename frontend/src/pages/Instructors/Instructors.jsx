@@ -23,7 +23,10 @@ const Instructors = () => {
         Our <span className="text-secondary">Best</span> Instructors
       </h1>
       <div className="w-[40%] text-center mx-auto my-4">
-        <p className="text-gray-500">1 câu nào đó </p>
+        <p className="text-gray-500">
+          Our best instructors are experts in their fields, dedicated to guiding
+          you every step of the way{" "}
+        </p>
       </div>
 
       {instructors.length > 0 ? (

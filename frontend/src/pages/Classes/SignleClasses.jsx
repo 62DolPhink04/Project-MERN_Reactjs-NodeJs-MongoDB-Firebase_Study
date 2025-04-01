@@ -78,7 +78,7 @@ const SignleClasses = () => {
                     <div className="xl:h-[470px] h-[350px] mb-10 course-main-thumb">
                       <img
                         // course.img
-                        src={bannerImg1}
+                        src={course.image}
                         alt=""
                         // object-fut
                         className="rounded-md object-fill w-full h-full block"
@@ -100,18 +100,18 @@ const SignleClasses = () => {
                           </div>
                         </div>
                         <div className="flex-1">
-                          <p className="text-secondary">
-                            Trainer
+                          <p className="text-secondary inline-flex items-center gap-x-2">
+                            <span>Trainer:</span>
                             <a href="#" className="text-black">
-                              : {course?.instructorName}
+                              {course?.instructorName}
                             </a>
                           </p>
                         </div>
                       </div>
                       <div>
-                        <span className="text-secondary">
-                          Last Update:
-                          <a href="#" className="text-black ml-1">
+                        <span className="text-secondary inline-flex items-center gap-x-2">
+                          <span>Last Update:</span>
+                          <a href="#" className="text-black">
                             {new Date(course.submitted).toLocaleDateString()}
                           </a>
                         </span>
@@ -159,47 +159,37 @@ const SignleClasses = () => {
                             <h3 className="text-2xl mt-8">
                               Course Description
                             </h3>
-                            <p className="mt-4">{course?.description}</p>
+                            <p className="mt-4 text-lg leading-relaxed whitespace-normal">
+                              {course?.description}
+                            </p>
+
                             <div className="bg-[#F8F8F8] dark:bg-indigo-500 space-y-6 p-8 rounded-md my-8">
                               <h4 className=" text-2x1">
                                 What You Will Learn?
                               </h4>
-                              <ul className=" grid sm:grid-cols-2 grid-cols-1 gap-6">
-                                <li className=" flex space-x-3">
-                                  <div className="flex-none relative top-1">
-                                    <img src="/correct-mark.png" alt="" />
-                                  </div>
-                                  <div className="flex-1">
-                                    Learn how perspective works and how to
-                                  </div>
-                                </li>
-
-                                <li className="flex space-x-3">
-                                  <div className="flex-none relative top-1">
-                                    <img src="/correct-mark.png" alt="" />
-                                  </div>
-                                  <div className="flex-1">
-                                    Learn how perspective works and how to
-                                  </div>
-                                </li>
-
-                                <li className="flex space-x-3">
-                                  <div className="flex-none relative top-1">
-                                    <img src="/correct-mark.png" alt="" />
-                                  </div>
-                                  <div className="flex-1">
-                                    Learn how perspective works and how to
-                                  </div>
-                                </li>
-
-                                <li className="flex space-x-3">
-                                  <div className="flex-none relative top-1">
-                                    <img src="/correct-mark.png" alt="" />
-                                  </div>
-                                  <div className="flex-1">
-                                    Learn how perspective works and how to
-                                  </div>
-                                </li>
+                              <ul className="grid sm:grid-cols-2 grid-cols-1 gap-6">
+                                {[
+                                  "Learn how perspective works",
+                                  "Learn how perspective works ",
+                                  "how to apply it effectively",
+                                  "how to use it in art",
+                                ].map((text, index) => (
+                                  <li
+                                    key={index}
+                                    className="flex space-x-3 items-start"
+                                  >
+                                    <div className="flex-none self-start mt-1.5">
+                                      <img
+                                        src="/correct-mark.png"
+                                        alt=""
+                                        className="w-5 h-5"
+                                      />
+                                    </div>
+                                    <div className="flex-1 break-words whitespace-normal">
+                                      {text}
+                                    </div>
+                                  </li>
+                                ))}
                               </ul>
                             </div>
                             <div>
@@ -237,25 +227,23 @@ const SignleClasses = () => {
                         </div>
                         <div id="tab2" className="tab-content">
                           <div>
-                            <h3 className="text-2x1 mt-8">Lesson Plan</h3>
-                            <p className="mt-4 flex ">
+                            <h3 className="text-2xl mt-8">Lesson Plan</h3>
+                            <p className="mt-4 text-lg leading-relaxed whitespace-normal">
                               This tutorial will help you learn quickly and
-                              thoroughly. Lorem ipsum, or lipsum as it sometimes
-                              known, is dummy text used in laying out print,
-                              graphic or web designs. Lorem ipsum dolor sit
-                              amet, consectetuer adipiscing elit. Donec odio.
-                              Quisque volutpat mattis eros.
+                              thoroughly. Lorem ipsum, or lipsum as it is
+                              sometimes known.
                             </p>
+
                             <div className="bg-[#F8F8F8] dark:bg-indigo-500 space-y-6 p-8 rounded-md my-8">
                               <h4 className="text-2xl">
                                 This Course is For Beginners
                               </h4>
                             </div>
                             <div>
-                              <h4 className=" text-2x1">
-                                What You will Learn?
+                              <h4 className="text-2xl font-semibold">
+                                What You Will Learn?
                               </h4>
-                              <p className="mt-4">
+                              <p className="mt-6 text-lg">
                                 Lorem ipsum dolor sit amet consectetur,
                                 adipisicing elit.
                               </p>
@@ -270,16 +258,22 @@ const SignleClasses = () => {
                 <div className="lg:col-span-4 col-span-12 mt-8 md:mt-0">
                   <div className="sidebarWrapper space-y-[30px]">
                     <div className="wdiget custom-text space-y-5">
-                      <a className="h-[220px] rounded relative block" href="#">
+                      <a
+                        className="h-[220px] rounded relative block"
+                        href={course.videoLink} // Liên kết video YouTube từ cơ sở dữ liệu
+                        target="_blank" // Mở video trong tab mới
+                        rel="noopener noreferrer"
+                      >
                         <img
                           src={course.image}
-                          alt=""
+                          alt="Course Thumbnail"
                           className="block w-full h-full object-cover rounded"
                         />
                         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                          <img src="/play.png" alt="" />
+                          <img src="/play.png" alt="Play Button" />
                         </div>
                       </a>
+
                       <h3>${course.price}</h3>
                       <button
                         onClick={() => handleSelect(course._id)}
@@ -391,7 +385,7 @@ const SignleClasses = () => {
                     </div>
 
                     <div className="widget">
-                      <h4 className="widget-title">Relate Courses</h4>
+                      <h4 className="widget-title mb-4">Relate Courses</h4>
                       <ul className="list">
                         <li className=" flex space-x-4 border-[#ECECEC] pb-6 mb-6 last:pb-0 last:mb-0 last:border-0 border-b">
                           <div className="flex-none">
@@ -425,7 +419,7 @@ const SignleClasses = () => {
                             <div className="mb-1 font-semibold text-black">
                               Greatest Passion In...
                             </div>
-                            <span className="text-secondary font-semibold">
+                            <span className="text-secondary font-semibold block mt-6">
                               $38.00
                             </span>
                           </div>
@@ -444,7 +438,7 @@ const SignleClasses = () => {
                             <div className="mb-1 font-semibold text-black">
                               Greatest Passion In...
                             </div>
-                            <span className="text-secondary font-semibold">
+                            <span className="text-secondary font-semibold block mt-6">
                               $38.00
                             </span>
                           </div>
@@ -463,7 +457,7 @@ const SignleClasses = () => {
                             <div className="mb-1 font-semibold text-black">
                               Greatest Passion In...
                             </div>
-                            <span className="text-secondary font-semibold">
+                            <span className="text-secondary font-semibold block mt-6">
                               $38.00
                             </span>
                           </div>
