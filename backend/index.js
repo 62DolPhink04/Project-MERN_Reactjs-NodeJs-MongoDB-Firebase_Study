@@ -126,6 +126,7 @@ async function run() {
       }
     });
 
+    //router get /users by ID
     app.get("/users/:id", async (req, res) => {
       const id = req.params.id;
       if (!ObjectId.isValid(id)) {
@@ -137,11 +138,43 @@ async function run() {
       res.send(result);
     });
 
+    //router get /user by email v1
+    // app.get("/user/:email", async (req, res) => {
+    //   const email = req.params.email;
+    //   const query = { email: email };
+    //   const result = await usersCollections.findOne(query);
+    //   res.send(result);
+    // });
+
+    //router get /user by email v1
     app.get("/user/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
-      const result = await usersCollections.findOne(query);
-      res.send(result);
+      try {
+        const result = await usersCollections.findOne(query);
+
+        if (!result) {
+          return res.status(404).json({ message: "User not found" });
+        }
+
+        // Trả về tất cả các trường cần thiết
+        const userData = {
+          name: result.name,
+          email: result.email,
+          photoUrl: result.photoUrl,
+          gender: result.gender,
+          phone: result.phone,
+          address: result.address,
+          skills: result.skills,
+          about: result.about,
+          createdAt: result.createdAt,
+        };
+
+        res.json(userData);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        res.status(500).json({ message: "Internal server error" });
+      }
     });
 
     app.delete("/delete-user/:id", async (req, res) => {
@@ -706,6 +739,40 @@ async function run() {
       const email = req.params.email;
       const result = await appliedCollection.findOne({ email });
       res.send(result);
+    });
+
+    // router Change Pass
+    app.post("/change-password", async (req, res) => {
+      try {
+        const { email, oldPassword, newPassword } = req.body;
+        console.log(req.body);
+
+        // Kiểm tra xem user có tồn tại không
+        const user = await usersCollections.findOne({ email });
+        if (!user) {
+          return res.status(404).json({ message: "Người dùng không tồn tại." });
+        }
+
+        // Kiểm tra mật khẩu cũ có đúng không
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+          return res
+            .status(400)
+            .json({ message: "Mật khẩu cũ không chính xác." });
+        }
+
+        // Hash mật khẩu mới
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        // Cập nhật mật khẩu mới
+        user.password = hashedPassword;
+        await user.save();
+
+        res.json({ message: "Đổi mật khẩu thành công!" });
+      } catch (error) {
+        res.status(500).json({ message: "Lỗi server", error: error.message });
+      }
     });
 
     // Send a ping to confirm a successful connection

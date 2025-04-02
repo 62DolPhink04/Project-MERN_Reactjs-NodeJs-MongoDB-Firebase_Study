@@ -52,7 +52,7 @@ const PopularTeacher = () => {
                   </p>
                   <p className="text-gray-500">Instructor</p>
                   <p className="text-gray-500 mb-4">
-                    Total Students: {instructor.totalEnrolled || 0}
+                    Total Students: {instructor?.totalEnrolled || 0}
                   </p>
                 </div>
               </div>

@@ -70,10 +70,8 @@ const SelectedClass = () => {
                 title: "Deleted!",
                 text: "Your file has been deleted.",
                 icon: "success",
-              }).then(() => {
-                // Reload lại trang sau khi xóa thành công
-                window.location.reload();
               });
+              navigate("/dashboard/my-selected");
             }
           })
           .catch((error) => {

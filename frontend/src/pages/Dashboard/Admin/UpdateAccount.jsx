@@ -31,6 +31,13 @@ const UpdateAccount = () => {
       })
       .catch((err) => console.log("Error updating user:", err));
   };
+
+  // handle Cancel
+  const handleCancel = () => {
+    console.log("Navigating to /dashboard/manage-users");
+    navigate("/dashboard/manage-users");
+  };
+
   return (
     <div>
       <h1 className="text-center text-4xl font-bold mt-5">
@@ -220,7 +227,14 @@ const UpdateAccount = () => {
                     id="message"
                   ></textarea>
                 </div>
-                <div className="mt-4">
+                <div className="mt-4 flex space-x-6 justify-center">
+                  <button
+                    onClick={handleCancel}
+                    type="cancel"
+                    className="inline-block w-full rounded-lg bg-red-500 px-5 py-3 font-medium text-white sm:w-auto "
+                  >
+                    CanCel
+                  </button>
                   <button
                     type="submit"
                     className="inline-block w-full rounded-lg bg-secondary px-5 py-3 font-medium text-white sm:w-auto "

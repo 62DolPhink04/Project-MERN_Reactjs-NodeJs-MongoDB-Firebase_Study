@@ -12,6 +12,8 @@ import ManageApplications from "../pages/Dashboard/Admin/ManageApplications";
 import ManageClass from "../pages/Dashboard/Admin/ManageClass";
 import ManageUser from "../pages/Dashboard/Admin/ManageUser";
 import UpdateAccount from "../pages/Dashboard/Admin/UpdateAccount";
+import ChangePass from "../pages/Dashboard/Dashboard_shared/ChangePass";
+import ProFile from "../pages/Dashboard/Dashboard_shared/Profile";
 import MyApproved from "../pages/Dashboard/Instructor/MyApproved";
 import MyClasses from "../pages/Dashboard/Instructor/MyClasses";
 import PendingCourse from "../pages/Dashboard/Instructor/PendingCourse";
@@ -155,6 +157,16 @@ export const router = createBrowserRouter([
         element: <UpdateAccount />,
         loader: ({ params }) =>
           fetch(`http://localhost:3000/users/${params.id}`),
+      },
+
+      // router shared
+      {
+        path: "info-profile",
+        element: <ProFile />,
+      },
+      {
+        path: "change-password",
+        element: <ChangePass />,
       },
     ],
   },

@@ -112,14 +112,14 @@ const lastMenuItems = [
     label: "Main Home",
   },
   {
-    to: "/trending",
+    to: "/dashboard/info-profile",
     icon: <MdOfflineBolt className="text-2xl" />,
-    label: "Trending",
+    label: "Profile",
   },
   {
-    to: "/browse",
+    to: "/dashboard/change-password",
     icon: <GiFigurehead className="text-2xl" />,
-    label: "Following",
+    label: "Change password",
   },
 ];
 
