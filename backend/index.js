@@ -53,25 +53,34 @@ async function run() {
       if (!authHeader) {
         return res.status(401).send({ message: "Invalid authorization" });
       }
-      const token = authHeader?.split(" ")[1];
-      jwt.verify(token, process.env.ACCESS_SECRET, (err, decode) => {
+      const token = authHeader.split(" ")[1];
+      jwt.verify(token, process.env.ACCESS_SECRET, (err, decoded) => {
         if (err) {
           return res.status(403).send({ message: "Invalid token" });
         }
-        req.decode = decode;
+        req.decode = decoded; // Chuyển thông tin người dùng vào req.decode
         next();
       });
     };
 
-    //addmin middleware for admin and instrustor
+    // Admin middleware cho admin và instructor
     const verifyAdmin = async (req, res, next) => {
-      const email = req.decode.email;
-      const query = { email: email };
-      const user = await usersCollections.findOne(query);
-      if (user.role == "admin") {
-        next();
-      } else {
-        return res.status(401).send({ message: "Not Access" });
+      const email = req.decode?.email; // Kiểm tra xem decode đã được gán chưa
+      if (!email) {
+        return res.status(400).send({ message: "No user found in token" });
+      }
+      try {
+        const user = await usersCollections.findOne({ email });
+        if (!user) {
+          return res.status(404).send({ message: "User not found" });
+        }
+        if (user.role === "admin") {
+          next();
+        } else {
+          return res.status(403).send({ message: "Access forbidden" });
+        }
+      } catch (err) {
+        return res.status(500).send({ message: "Server error" });
       }
     };
 

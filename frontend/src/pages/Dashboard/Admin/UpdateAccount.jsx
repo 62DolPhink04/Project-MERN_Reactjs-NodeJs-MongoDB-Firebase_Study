@@ -64,7 +64,6 @@ const UpdateAccount = () => {
                       id="name"
                       className="w-full rounded-lg mt-3 border outline-none border-secondary p-3 text-sm"
                       placeholder="Your name"
-                      required
                       defaultValue={
                         userCredentials?.name ? userCredentials?.name : ""
                       }
@@ -80,7 +79,6 @@ const UpdateAccount = () => {
                       id="phone"
                       className="w-full rounded-lg mt-3 border outline-none border-secondary p-3 text-sm"
                       placeholder="Phone number"
-                      required
                       defaultValue={
                         userCredentials?.phone ? userCredentials?.phone : ""
                       }
@@ -97,7 +95,6 @@ const UpdateAccount = () => {
                       name="email"
                       id="email"
                       className="w-full mt-2 h-12 rounded-lg border border-secondary p-3 text-sm"
-                      required
                       defaultValue={userCredentials?.email}
                     />
                   </div>
@@ -111,7 +108,6 @@ const UpdateAccount = () => {
                       id="skills"
                       className="w-full mt-2 h-12 rounded-lg border border-secondary p-3 text-sm"
                       placeholder="Enter skills"
-                      required
                       defaultValue={userCredentials?.skills || ""}
                     />
                   </div>
@@ -128,7 +124,6 @@ const UpdateAccount = () => {
                       id="address"
                       className="w-full mt-2 h-12 rounded-lg border border-secondary p-3 text-sm"
                       placeholder="Enter address"
-                      required
                       defaultValue={userCredentials?.address}
                     />
                   </div>
@@ -142,7 +137,6 @@ const UpdateAccount = () => {
                       id="photoUrl"
                       className="w-full mt-2 h-12 rounded-lg border border-secondary p-3 text-sm"
                       placeholder="Photo URL"
-                      required
                       defaultValue={userCredentials?.photoUrl}
                     />
                   </div>
