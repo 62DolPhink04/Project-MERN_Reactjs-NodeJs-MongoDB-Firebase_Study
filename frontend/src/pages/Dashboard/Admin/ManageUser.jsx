@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { GrUpdate } from "react-icons/gr";
 import { MdDeleteSweep } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import useAxiosFetch from "../../../hooks/useAxiosFetch";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
@@ -19,13 +20,31 @@ const ManageUser = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axiosSecure
-      .delete(`/delete-user/${id}`)
-      .then((res) => {
-        alert("User successfully");
-      })
-      .catch((err) => console.log(err));
+    axiosSecure.delete(`/delete-user/${id}`);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your Account has been deleted.",
+          icon: "success",
+        });
+        window.location.reload();
+      }
+    });
   };
+  //     .then((res) => {
+  //       alert("User successfully");
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
   return (
     <div>

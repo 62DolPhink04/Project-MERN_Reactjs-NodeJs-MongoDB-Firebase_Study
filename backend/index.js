@@ -1,6 +1,8 @@
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
+const bcrypt = require("bcryptjs");
+// const saltRounds = 10;
 const app = express();
 require("dotenv").config();
 const stripe = require("stripe")(process.env.PAYMEN_SECRET);
@@ -152,6 +154,7 @@ async function run() {
       const query = { email: email };
       try {
         const result = await usersCollections.findOne(query);
+        console.log(result);
 
         if (!result) {
           return res.status(404).json({ message: "User not found" });
@@ -742,18 +745,24 @@ async function run() {
     });
 
     // router Change Pass
+
     app.post("/change-password", async (req, res) => {
       try {
         const { email, oldPassword, newPassword } = req.body;
-        console.log(req.body);
+        console.log("Dữ liệu nhận từ frontend:", req.body);
 
-        // Kiểm tra xem user có tồn tại không
+        // Kiểm tra xem có tất cả các trường cần thiết không
+        if (!email || !oldPassword || !newPassword) {
+          return res.status(400).json({ message: "Thiếu thông tin yêu cầu." });
+        }
+
+        // Tìm user trong database theo email
         const user = await usersCollections.findOne({ email });
         if (!user) {
           return res.status(404).json({ message: "Người dùng không tồn tại." });
         }
 
-        // Kiểm tra mật khẩu cũ có đúng không
+        // Kiểm tra mật khẩu cũ: So sánh mật khẩu cũ với password đã hash trong cơ sở dữ liệu
         const isMatch = await bcrypt.compare(oldPassword, user.password);
         if (!isMatch) {
           return res
@@ -761,13 +770,16 @@ async function run() {
             .json({ message: "Mật khẩu cũ không chính xác." });
         }
 
-        // Hash mật khẩu mới
+        // Mật khẩu cũ đúng, tiến hành băm mật khẩu mới
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+        console.log("Mật khẩu mới được băm: ", hashedNewPassword);
 
-        // Cập nhật mật khẩu mới
-        user.password = hashedPassword;
-        await user.save();
+        // Cập nhật mật khẩu mới vào cơ sở dữ liệu
+        await usersCollections.updateOne(
+          { email },
+          { $set: { password: hashedNewPassword } }
+        );
 
         res.json({ message: "Đổi mật khẩu thành công!" });
       } catch (error) {

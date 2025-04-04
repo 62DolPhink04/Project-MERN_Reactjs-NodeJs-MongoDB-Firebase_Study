@@ -22,6 +22,8 @@ const SignleClasses = () => {
   const [enrolledClasses, setEnrolledClasses] = useState([]);
   const axiosFetch = useAxiosFetch();
   console.log("Course Data:", course);
+  console.log("Video Link:", course.videolink);
+  console.log("Course Image:", course.image);
 
   const handleSelect = (id) => {
     axiosSecure
@@ -159,9 +161,16 @@ const SignleClasses = () => {
                             <h3 className="text-2xl mt-8">
                               Course Description
                             </h3>
-                            <p className="mt-4 text-lg leading-relaxed whitespace-normal">
-                              {course?.description}
-                            </p>
+                            <p
+                              className="mt-4 text-lg leading-relaxed whitespace-normal"
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  course?.description?.replace(
+                                    /\.\s*/g,
+                                    ".<br />"
+                                  ) || "",
+                              }}
+                            ></p>
 
                             <div className="bg-[#F8F8F8] dark:bg-indigo-500 space-y-6 p-8 rounded-md my-8">
                               <h4 className=" text-2x1">
@@ -260,7 +269,7 @@ const SignleClasses = () => {
                     <div className="wdiget custom-text space-y-5">
                       <a
                         className="h-[220px] rounded relative block"
-                        href={course.videoLink} // Liên kết video YouTube từ cơ sở dữ liệu
+                        href={course.videolink || "#"}
                         target="_blank" // Mở video trong tab mới
                         rel="noopener noreferrer"
                       >
@@ -269,6 +278,7 @@ const SignleClasses = () => {
                           alt="Course Thumbnail"
                           className="block w-full h-full object-cover rounded"
                         />
+
                         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                           <img src="/play.png" alt="Play Button" />
                         </div>

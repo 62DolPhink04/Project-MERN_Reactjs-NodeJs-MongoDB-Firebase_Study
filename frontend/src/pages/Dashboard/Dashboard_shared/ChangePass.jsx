@@ -1,9 +1,10 @@
 import { useState } from "react";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import useAxiosSecure from "../../../hooks/useUser";
 
 const ChangePass = () => {
+  const [user, setUser] = useState(null);
   const { currentUser } = useAxiosSecure();
-  console.log(currentUser); // Log giá trị của currentUser
+  // console.log("data nhận được: ", currentUser); // Log giá trị của currentUser
 
   const [form, setForm] = useState({
     oldPassword: "",
@@ -19,10 +20,18 @@ const ChangePass = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Kiểm tra mật khẩu mới và xác nhận mật khẩu có khớp không
     if (form.newPassword !== form.confirmPassword) {
       setError("Mật khẩu mới và xác nhận mật khẩu không khớp.");
       return;
     }
+
+    console.log("Dữ liệu gửi lên: ", {
+      email: currentUser?.email, // email người dùng
+      oldPassword: form.oldPassword, // mật khẩu cũ
+      newPassword: form.newPassword, // mật khẩu mới
+    });
 
     try {
       const response = await fetch("http://localhost:3000/change-password", {
@@ -36,6 +45,7 @@ const ChangePass = () => {
       });
 
       const data = await response.json();
+      // console.log(data);
       if (!response.ok) {
         setError(data.message);
       } else {
@@ -60,40 +70,55 @@ const ChangePass = () => {
           </h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-5">
-              <label className="block text-sm font-semibold mb-2">
+              <label
+                className="block text-sm font-semibold mb-2"
+                htmlFor="oldPassword"
+              >
                 Mật khẩu hiện tại
               </label>
               <input
                 type="password"
                 name="oldPassword"
                 value={form.oldPassword}
-                onChange={handleChange}
+                onChange={(e) =>
+                  setForm({ ...form, oldPassword: e.target.value })
+                }
                 required
                 className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400 hover:border-blue-500"
               />
             </div>
             <div className="mb-5">
-              <label className="block text-sm font-semibold mb-2">
+              <label
+                className="block text-sm font-semibold mb-2"
+                htmlFor="newPassword"
+              >
                 Mật khẩu mới
               </label>
               <input
                 type="password"
                 name="newPassword"
                 value={form.newPassword}
-                onChange={handleChange}
+                onChange={(e) =>
+                  setForm({ ...form, newPassword: e.target.value })
+                }
                 required
                 className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400 hover:border-blue-500"
               />
             </div>
             <div className="mb-5">
-              <label className="block text-sm font-semibold mb-2">
+              <label
+                className="block text-sm font-semibold mb-2"
+                htmlFor="confirmPassword"
+              >
                 Xác nhận mật khẩu mới
               </label>
               <input
                 type="password"
                 name="confirmPassword"
                 value={form.confirmPassword}
-                onChange={handleChange}
+                onChange={(e) =>
+                  setForm({ ...form, confirmPassword: e.target.value })
+                }
                 required
                 className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400 hover:border-blue-500"
               />

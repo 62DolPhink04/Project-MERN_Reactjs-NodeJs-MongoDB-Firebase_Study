@@ -37,6 +37,7 @@ const Register = () => {
             phone: data.phone,
             address: data.address,
           };
+
           if (user.email && user.displayName) {
             return axios
               .post("http://localhost:3000/new-user", userImp)
