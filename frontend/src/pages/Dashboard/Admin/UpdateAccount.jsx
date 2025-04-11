@@ -1,10 +1,16 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import useAxiosFetch from "../../../hooks/useAxiosFetch";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useAuth } from "../../../ultilities/providers/AuthProvider";
 
+const KEY = import.meta.env.VITE_IMG_TOKEN;
+
 const UpdateAccount = () => {
+  const API_URL = `https://api.imgbb.com/1/upload?key=${KEY}&name=`;
+  const [image, setImage] = useState(null);
+
   const { user } = useAuth();
   const userCredentials = useLoaderData();
   //   console.log(userCredentials);
@@ -13,31 +19,55 @@ const UpdateAccount = () => {
   const axiosFetch = useAxiosFetch();
   const navigate = useNavigate();
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    const formdata = new FormData(e.target);
-    const updateData = Object.fromEntries(formdata.entries());
+    const formData = new FormData(e.target);
+    const updateData = Object.fromEntries(formData.entries());
 
-    // console.log("Data being sent to API:", updateData);
-    axiosSecure
-      .put(`/update-user/${userCredentials?._id}`, updateData)
-      .then((res) => {
-        // console.log("Response from API:", res.data);
+    // Nếu field nào rỗng thì giữ nguyên data cũ
+    Object.keys(updateData).forEach((key) => {
+      if (!updateData[key]) {
+        updateData[key] = userCredentials[key] || "";
+      }
+    });
 
-        if (res.data.modifiedCount > 0) {
-          alert("Update Successfully!");
-          navigate("/dashboard/manage-users");
-        }
-      })
-      .catch((err) => console.log("Error updating user:", err));
+    try {
+      let imageUrl = userCredentials.photoUrl; // giữ ảnh cũ nếu không đổi
+
+      if (image) {
+        const imageFormData = new FormData();
+        imageFormData.append("image", image);
+
+        const response = await axios.post(API_URL, imageFormData);
+        imageUrl = response.data.data.url;
+      }
+
+      updateData.photoUrl = imageUrl;
+      updateData.role = userCredentials.role; // giữ role cũ
+
+      const res = await axiosSecure.put(
+        `/update-user/${userCredentials._id}`,
+        updateData
+      );
+
+      if (res.data.modifiedCount > 0) {
+        alert("Update Successfully!");
+        navigate("/dashboard/manage-users");
+      }
+    } catch (err) {
+      console.error("Error updating user:", err);
+    }
   };
-
   // handle Cancel
   const handleCancel = () => {
     console.log("Navigating to /dashboard/manage-users");
     navigate("/dashboard/manage-users");
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+  };
   return (
     <div>
       <h1 className="text-center text-4xl font-bold mt-5">
@@ -132,12 +162,10 @@ const UpdateAccount = () => {
                       Photo URL
                     </label>
                     <input
-                      type="text"
-                      name="photoUrl"
-                      id="photoUrl"
-                      className="w-full mt-2 h-12 rounded-lg border border-secondary p-3 text-sm"
-                      placeholder="Photo URL"
-                      defaultValue={userCredentials?.photoUrl}
+                      type="file"
+                      // {...Register("image")}
+                      onChange={(e) => setImage(e.target.files[0])}
+                      className="w-full border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:border-blue-300"
                     />
                   </div>
                 </div>

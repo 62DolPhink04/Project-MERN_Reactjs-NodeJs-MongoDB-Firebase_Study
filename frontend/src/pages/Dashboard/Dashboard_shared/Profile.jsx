@@ -84,12 +84,6 @@ const ProFile = () => {
     });
   };
 
-  // handle navigate to update user page
-  // const handleUpdate = () => {
-  //   navigate(`/dashboard/update-user/${user._id}`);
-  //   navigate(`/dashboard/info-profile`); // Chuyển đến trang cập nhật người dùng
-  // };
-
   return (
     <div>
       <div className="my-9">
