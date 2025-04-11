@@ -5,6 +5,7 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import { BsFillPostcardFill } from "react-icons/bs";
 import { FaUserPlus, FaUsers } from "react-icons/fa";
 import { GiFigurehead } from "react-icons/gi";
+import { ImEyeBlocked } from "react-icons/im";
 import { IoMdDoneAll } from "react-icons/io";
 import { IoSchoolSharp } from "react-icons/io5";
 import {
@@ -77,6 +78,11 @@ const instructorNavItem = [
     to: "/dashboard/my-approved",
     icon: <IoMdDoneAll className="text-2xl" />,
     label: "Approved Classes",
+  },
+  {
+    to: "/dashboard/my-rejected",
+    icon: <ImEyeBlocked className="text-2xl" />,
+    label: "Rejected Classes",
   },
 ];
 

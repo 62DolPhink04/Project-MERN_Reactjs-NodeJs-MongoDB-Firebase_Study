@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useUser from "../../../hooks/useUser";
 
@@ -9,7 +10,8 @@ const AddClass = () => {
   const axiosSecure = useAxiosSecure();
   const { currentUser, isLoading } = useUser();
   const [image, setImage] = useState(null);
-  const formRef = useRef(); // Tham chiếu đến form để reset lại
+  const formRef = useRef();
+  const { error, setError, loader, setLoader } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     availableSeats: "",
@@ -266,8 +268,9 @@ const AddClass = () => {
           <button
             className="bg-secondary w-full hover:bg-red-400 duration-200 text-white font-bold py-2 px-4 rounded"
             type="submit"
+            disabled={loader}
           >
-            Add New Course
+            {loader ? "Add..." : "Add New Course"}
           </button>
         </div>
       </form>

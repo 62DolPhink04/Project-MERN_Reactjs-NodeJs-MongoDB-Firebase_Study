@@ -19,6 +19,7 @@ import UpdateProfile from "../pages/Dashboard/Dashboard_shared/UpdateProfile";
 import MyApproved from "../pages/Dashboard/Instructor/MyApproved";
 import MyClasses from "../pages/Dashboard/Instructor/MyClasses";
 import PendingCourse from "../pages/Dashboard/Instructor/PendingCourse";
+import RejectedCourse from "../pages/Dashboard/Instructor/RejectedCourse";
 import UpdateClass from "../pages/Dashboard/Instructor/UpdateClass";
 import ApplyInstructor from "../pages/Dashboard/Student/apply/ApplyInstructor";
 import EnrolledClasses from "../pages/Dashboard/Student/Enroll/EnrolledClasses";
@@ -127,6 +128,10 @@ export const router = createBrowserRouter([
       {
         path: "my-approved",
         element: <MyApproved />,
+      },
+      {
+        path: "my-rejected",
+        element: <RejectedCourse />,
       },
       {
         path: "update/:id",
