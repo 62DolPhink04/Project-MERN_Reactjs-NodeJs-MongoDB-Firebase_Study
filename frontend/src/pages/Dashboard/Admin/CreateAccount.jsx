@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import {
   AiOutlineLock,
   AiOutlineMail,
@@ -48,7 +49,7 @@ const CreateAccount = () => {
               .post("http://localhost:3000/new-user", userImp)
               .then(() => {
                 navigate("/");
-                alert("Registrantion Successfully!");
+                toast.success("Registrantion Successfully!");
               })
               .catch((err) => {
                 setError(err.code);

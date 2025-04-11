@@ -108,6 +108,7 @@
 // export default Login;
 
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { FaRegEye } from "react-icons/fa";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -127,11 +128,13 @@ const Login = () => {
     const formData = Object.fromEntries(data);
     login(formData.email, formData.password)
       .then(() => {
-        alert("Login Successfully");
+        toast.success("Login Successfully", {
+          duration: 3000,
+        });
         navigate(location.state?.from || "/");
       })
       .catch((err) => {
-        alert("Login Unsuccessfully");
+        toast.success("Login Unsuccessfully");
         setError("Check email or password", err.code);
         setLoader(false);
       });

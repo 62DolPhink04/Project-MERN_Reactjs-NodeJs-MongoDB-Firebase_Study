@@ -1,5 +1,6 @@
 import Pagination from "@mui/material/Pagination";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAxiosFetch from "../../../hooks/useAxiosFetch";
@@ -45,12 +46,16 @@ const ManageClass = () => {
     axiosSecure
       .put(`/change-status/${id}`, { status: "approved" })
       .then((res) => {
-        console.log(res.data);
-        alert("Course Approved successfully!");
+        // console.log(res.data);
+
         const newClass = classes.map((cls) =>
           cls._id === id ? { ...cls, status: "approved" } : cls
         );
         setClasses(newClass);
+
+        toast.success("Course Approved successfully!", {
+          duration: 3000,
+        });
         window.location.reload();
       })
       .catch((err) => console.log(err));
@@ -90,6 +95,9 @@ const ManageClass = () => {
 
           // Reload lại trang
           window.location.reload();
+          toast.success("Course rejected successfully!", {
+            duration: 3000,
+          });
         }
       } catch (error) {
         console.log("Error:", error);
@@ -101,7 +109,9 @@ const ManageClass = () => {
       .put(`/change-status/${id}`, { status: "pending" })
       .then((res) => {
         console.log(res.data);
-        alert("Course Approved successfully!");
+        toast.success("Course Pending successfully!", {
+          duration: 3000,
+        });
         const newClass = classes.map((cls) =>
           cls._id === id ? { ...cls, status: "pending" } : cls
         );

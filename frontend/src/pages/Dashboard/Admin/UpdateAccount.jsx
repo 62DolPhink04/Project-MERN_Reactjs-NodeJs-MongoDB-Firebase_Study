@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import useAxiosFetch from "../../../hooks/useAxiosFetch";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -51,7 +52,7 @@ const UpdateAccount = () => {
       );
 
       if (res.data.modifiedCount > 0) {
-        alert("Update Successfully!");
+        toast.success("Update Successfully!");
         navigate("/dashboard/manage-users");
       }
     } catch (err) {

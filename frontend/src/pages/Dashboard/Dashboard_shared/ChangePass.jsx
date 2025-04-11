@@ -123,6 +123,7 @@
 
 import { updatePassword } from "firebase/auth";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useUser";
 
@@ -159,7 +160,7 @@ const ChangePass = () => {
       if (user && user.providerData[0]?.providerId === "google.com") {
         // ✅ Nếu dùng Google Firebase
         await updatePassword(user, form.newPassword);
-        alert("Đổi mật khẩu Firebase thành công!");
+        toast.success("Change Password Successfully!");
       } else {
         // ✅ Nếu dùng MongoDB (local auth)
         const response = await fetch("http://localhost:3000/change-password", {
@@ -178,7 +179,7 @@ const ChangePass = () => {
           throw new Error(data.message || "Có lỗi xảy ra khi đổi mật khẩu.");
         }
 
-        alert("Đổi mật khẩu thành công!");
+        toast.success("Change Password Successfully!");
       }
 
       // Reset form sau khi đổi thành công

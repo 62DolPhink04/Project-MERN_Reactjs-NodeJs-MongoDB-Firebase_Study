@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useUser from "../../../hooks/useUser";
@@ -11,6 +12,19 @@ const UpdateClass = () => {
   const { currentUser } = useUser();
   const { id: classId } = useParams();
   const navigate = useNavigate();
+
+  // message
+  const showWarningToast = (message) => {
+    toast(message, {
+      icon: "⚠️",
+      style: {
+        borderRadius: "8px",
+        background: "#fff4e5",
+        color: "#ff9900",
+      },
+      duration: 3000,
+    });
+  };
   //   console.log("Current classId:", classId);
   const formRef = useRef();
 
@@ -89,13 +103,13 @@ const UpdateClass = () => {
         headers: { "Content-Type": "application/json" },
       })
       .then((res) => {
-        alert("Class updated successfully!");
+        toast.success("Class updated successfully!");
         navigate("/dashboard/my-classes");
         // console.log("Response from API:", res.data);
       })
       .catch((error) => {
         console.error("Error updating class:", error);
-        alert("Failed to update class. Please try again.");
+        showWarningToast("Failed to update class. Please try again.");
       });
   };
 

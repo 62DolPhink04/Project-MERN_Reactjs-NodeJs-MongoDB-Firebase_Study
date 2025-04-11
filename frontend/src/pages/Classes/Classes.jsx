@@ -1,5 +1,6 @@
 import { Transition } from "@headlessui/react";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import useAxiosFetch from "../../hooks/useAxiosFetch";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -17,6 +18,18 @@ const Classes = () => {
 
   // const { user } = useContext(AuthProvider);
   // console.log(user);
+  // message
+  const showWarningToast = (message) => {
+    toast(message, {
+      icon: "⚠️",
+      style: {
+        borderRadius: "8px",
+        background: "#fff4e5",
+        color: "#ff9900",
+      },
+      duration: 3000,
+    });
+  };
 
   const handleHover = (index) => {
     setHoveredCard(index);
@@ -32,7 +45,7 @@ const Classes = () => {
   // handle add to cart
   const handleSelect = async (id) => {
     if (!currentUser) {
-      alert("Please Login First");
+      showWarningToast("Please Login First");
       navigate("/login"); // Chuyển hướng sang trang login
       return;
     }
@@ -55,7 +68,7 @@ const Classes = () => {
         (item) => item.Classes._id === id
       );
       if (isEnrolled) {
-        alert("Already enrolled");
+        toast.success("Already enrolled");
         return;
       }
 
@@ -70,7 +83,7 @@ const Classes = () => {
       );
 
       if (cartItemRes.data.classId === id) {
-        alert("Already Selected!");
+        toast.success("Already Selected!");
         return;
       }
 
@@ -87,11 +100,11 @@ const Classes = () => {
         },
       });
 
-      alert("Successfully added to cart!");
+      toast.success("Successfully added to cart!");
       console.log(addToCartRes.data);
     } catch (err) {
       console.log(err); // In lỗi nếu có
-      alert("An error occurred while processing your request.");
+      toast.error("An error occurred while processing your request.");
     }
   };
   return (

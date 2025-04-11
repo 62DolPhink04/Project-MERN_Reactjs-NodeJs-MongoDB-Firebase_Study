@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useAuth } from "../../../ultilities/providers/AuthProvider";
@@ -46,7 +47,7 @@ const UpdateProfile = () => {
       );
 
       if (res.data.modifiedCount > 0) {
-        alert("Update Successfully!");
+        toast.success("Update Successfully!");
         navigate("/dashboard/info-profile");
       }
     } catch (err) {

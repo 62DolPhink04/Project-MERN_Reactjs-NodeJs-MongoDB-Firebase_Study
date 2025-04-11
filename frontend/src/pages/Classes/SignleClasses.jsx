@@ -4,11 +4,11 @@ import bannerImg1 from "../../assets/home/banner-1.jpg";
 
 import useAxiosFetch from "../../hooks/useAxiosFetch";
 // import axiosSecure from "../../hooks/useAxiosSecure";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
-import useUser from "../../hooks/useUser";
-
+import toast from "react-hot-toast";
 import { BiTime } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useUser from "../../hooks/useUser";
 // import { MbBookOnline } from "react-icons/md";
 import { MdBookOnline } from "react-icons/md";
 // import {Falanguage , FalevelUpAlt , FaUser , FaUsers} from "react-icons/fa" ;
@@ -21,13 +21,26 @@ const SignleClasses = () => {
   const role = currentUser?.role;
   const [enrolledClasses, setEnrolledClasses] = useState([]);
   const axiosFetch = useAxiosFetch();
-  console.log("Course Data:", course);
-  console.log("Video Link:", course.videolink);
-  console.log("Course Image:", course.image);
+
+  // message
+  const showWarningToast = (message) => {
+    toast(message, {
+      icon: "⚠️",
+      style: {
+        borderRadius: "8px",
+        background: "#fff4e5",
+        color: "#ff9900",
+      },
+      duration: 3000,
+    });
+  };
+  // console.log("Course Data:", course);
+  // console.log("Video Link:", course.videolink);
+  // console.log("Course Image:", course.image);
 
   const handleSelect = async (id) => {
     if (!currentUser) {
-      alert("Please Login First");
+      showWarningToast("Please Login First");
       navigate("/login"); // Chuyển hướng sang trang login
       return;
     }
@@ -41,7 +54,7 @@ const SignleClasses = () => {
 
       // Kiểm tra xem lớp học đã có trong danh sách đăng ký chưa
       if (enrolledClassesRes.data.find((item) => item.Classes._id === id)) {
-        alert("Already enrolled");
+        toast.success("Already enrolled");
         return;
       }
 
@@ -50,7 +63,7 @@ const SignleClasses = () => {
         `/cart-item/${id}?email=${currentUser?.email}`
       );
       if (cartItemRes.data.classId === id) {
-        alert("Already Selected!");
+        toast.success("Already Selected!");
         return;
       }
 
@@ -62,11 +75,11 @@ const SignleClasses = () => {
       };
 
       const addToCartRes = await axiosSecure.post("/add-to-cart", data);
-      alert("Successfully added to cart!");
+      toast.success("Successfully added to cart!");
       console.log(addToCartRes.data);
     } catch (err) {
       console.log(err);
-      alert("An error occurred while processing your request.");
+      toast.error("An error occurred while processing your request.");
     }
   };
 

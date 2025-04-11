@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import toast from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useUser from "../../../hooks/useUser";
@@ -59,7 +60,7 @@ const AddClass = () => {
           axiosSecure
             .post("/new-class", newData)
             .then((res) => {
-              alert("Successfully added classes!");
+              toast.success("Successfully added classes!");
               console.log(res.data);
 
               // Reset form and image state
