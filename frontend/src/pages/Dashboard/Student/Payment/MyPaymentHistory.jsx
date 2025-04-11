@@ -51,7 +51,7 @@ const PaymentHistory = () => {
           Wellcome...!
         </p>
         <h1 className="text-4xl font-bold">
-          My Paym <span className="text-secondary">ent Hist</span>ory
+          My Paym<span className="text-secondary">ent Hist</span>ory
         </h1>
         <p className="text-gray-500 text-sm my-3">
           You can see your payment history here.

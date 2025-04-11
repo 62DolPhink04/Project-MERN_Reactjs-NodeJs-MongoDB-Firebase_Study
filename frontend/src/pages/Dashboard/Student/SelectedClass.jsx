@@ -154,10 +154,12 @@ const SelectedClass = () => {
                             <td className="py-4 flex pt-8 gap-2">
                               <button
                                 onClick={() => hanleDelete(item._id)}
-                                className="px-3 py-1 cursor-pointer bg-red-500 rounded-3xl text-white font-bold"
+                                className="flex items-center px-0.5 p-2 cursor-pointer bg-red-500 rounded-3xl text-white font-bold"
                               >
-                                <MdDeleteSweep />
+                                <MdDeleteSweep className="text-lg" />{" "}
+                                {/* Điều chỉnh kích thước của icon */}
                               </button>
+
                               <button
                                 onClick={() => handlePayment(item._id)}
                                 className="px-3 py-1 cursor-pointer bg-green-500 rounded-3xl text-white font-bold flex items-center"

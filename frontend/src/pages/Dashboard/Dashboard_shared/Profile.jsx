@@ -50,7 +50,6 @@ const ProFile = () => {
 
   // Handle delete account
   const handleDelete = (id) => {
-    axiosSecure.delete(`/delete-user/${id}`);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -61,12 +60,26 @@ const ProFile = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your Account has been deleted.",
-          icon: "success",
-        });
-        navigate("/"); // Chuyển hướng về trang chính sau khi xóa tài khoản
+        // Gọi axios delete sau khi người dùng xác nhận
+        axiosSecure
+          .delete(`/delete-user/${id}`)
+          .then((response) => {
+            // Xử lý khi xóa thành công
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your account has been deleted.",
+              icon: "success",
+            });
+            navigate("/"); // Chuyển hướng về trang chính sau khi xóa tài khoản
+          })
+          .catch((error) => {
+            // Xử lý khi có lỗi khi xóa tài khoản
+            Swal.fire({
+              title: "Error!",
+              text: "There was an issue deleting your account.",
+              icon: "error",
+            });
+          });
       }
     });
   };

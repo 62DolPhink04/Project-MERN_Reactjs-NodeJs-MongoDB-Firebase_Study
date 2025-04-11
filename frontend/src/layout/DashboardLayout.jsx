@@ -3,7 +3,7 @@ import { BiHomeAlt, BiLogInCircle, BiSelectMultiple } from "react-icons/bi";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 // import { BsFillPostcardFill } from "react-icons/bs ";
 import { BsFillPostcardFill } from "react-icons/bs";
-import { FaUsers } from "react-icons/fa";
+import { FaUserPlus, FaUsers } from "react-icons/fa";
 import { GiFigurehead } from "react-icons/gi";
 import { IoMdDoneAll } from "react-icons/io";
 import { IoSchoolSharp } from "react-icons/io5";
@@ -43,6 +43,11 @@ const adminNavItems = [
     to: "/dashboard/manage-applications",
     icon: <TbBrandAppleArcade className="text-2xl" />,
     label: "Applications",
+  },
+  {
+    to: "/dashboard/create-accounts",
+    icon: <FaUserPlus className="text-2xl" />,
+    label: "Create Account",
   },
 ];
 
@@ -104,7 +109,7 @@ const students = [
   },
 ];
 
-// router menu last admin
+// router menu last main
 const lastMenuItems = [
   {
     to: "/",
@@ -141,9 +146,9 @@ const DashboardLayout = () => {
   }
 
   // handleLogOut
+  // handleLogOut
   const handleLogOut = () => {
     // https://sweetalert2.github.io/#examples
-
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -155,18 +160,20 @@ const DashboardLayout = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         logOut()
-          .then(
+          .then(() => {
             Swal.fire({
               title: "Logout!",
-              text: "You has been logout.",
+              text: "You have been logged out.",
               icon: "success",
-            })
-          )
+            }).then(() => {
+              navigate("/"); // Navigate to home after successful logout
+            });
+          })
           .catch((error) => console.log(error));
       }
-      navigate("/");
     });
   };
+
   return (
     <div className="flex">
       <div

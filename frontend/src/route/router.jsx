@@ -8,6 +8,7 @@ import AddClass from "../pages/Dashboard/Instructor/AddClass";
 import InstructorCP from "../pages/Dashboard/Instructor/InstructorCP";
 
 import AdminCP from "../pages/Dashboard/Admin/AdminCP";
+import CreateAccount from "../pages/Dashboard/Admin/CreateAccount";
 import ManageApplications from "../pages/Dashboard/Admin/ManageApplications";
 import ManageClass from "../pages/Dashboard/Admin/ManageClass";
 import ManageUser from "../pages/Dashboard/Admin/ManageUser";
@@ -158,6 +159,10 @@ export const router = createBrowserRouter([
         element: <UpdateAccount />,
         loader: ({ params }) =>
           fetch(`http://localhost:3000/users/${params.id}`),
+      },
+      {
+        path: "create-accounts",
+        element: <CreateAccount />,
       },
 
       // router shared

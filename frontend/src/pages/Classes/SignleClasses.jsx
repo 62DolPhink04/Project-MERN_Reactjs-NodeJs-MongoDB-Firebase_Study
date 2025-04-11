@@ -25,36 +25,49 @@ const SignleClasses = () => {
   console.log("Video Link:", course.videolink);
   console.log("Course Image:", course.image);
 
-  const handleSelect = (id) => {
-    axiosSecure
-      .get(`/enrolled-classes/${currentUser?.email}`)
-      .then((res) => setEnrolledClasses(res.data))
-      .catch((err) => console.log(err));
+  const handleSelect = async (id) => {
     if (!currentUser) {
       alert("Please Login First");
       navigate("/login"); // Chuyển hướng sang trang login
       return;
     }
 
-    axiosSecure
-      .get(`/cart-item/${id}??email=${currentUser?.email}`)
-      .then((res) => {
-        if (res.data.classId === id) {
-          return alert("Already Selected!");
-        } else if (enrolledClasses.find((item) => item.Classes._id === id)) {
-          return alert("Already enrolled");
-        } else {
-          const data = {
-            classId: id,
-            useMail: currentUser?.email,
-            data: new Date(),
-          };
-          axiosSecure.post("/add-to-cart", data).then((res) => {
-            alert("Successfully add to cart!");
-            console.log(res.data);
-          });
-        }
-      });
+    try {
+      // Kiểm tra xem người dùng đã đăng ký các lớp học chưa
+      const enrolledClassesRes = await axiosSecure.get(
+        `/enrolled-classes/${currentUser?.email}`
+      );
+      setEnrolledClasses(enrolledClassesRes.data); // Đổi setErrolledClasses thành setEnrolledClasses
+
+      // Kiểm tra xem lớp học đã có trong danh sách đăng ký chưa
+      if (enrolledClassesRes.data.find((item) => item.Classes._id === id)) {
+        alert("Already enrolled");
+        return;
+      }
+
+      // Kiểm tra xem lớp học đã có trong giỏ hàng chưa
+      const cartItemRes = await axiosSecure.get(
+        `/cart-item/${id}?email=${currentUser?.email}`
+      );
+      if (cartItemRes.data.classId === id) {
+        alert("Already Selected!");
+        return;
+      }
+
+      // Nếu chưa có trong giỏ hàng, tiến hành thêm vào giỏ hàng
+      const data = {
+        classId: id,
+        useMail: currentUser?.email,
+        data: new Date(),
+      };
+
+      const addToCartRes = await axiosSecure.post("/add-to-cart", data);
+      alert("Successfully added to cart!");
+      console.log(addToCartRes.data);
+    } catch (err) {
+      console.log(err);
+      alert("An error occurred while processing your request.");
+    }
   };
 
   return (

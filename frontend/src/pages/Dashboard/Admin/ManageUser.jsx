@@ -1,3 +1,4 @@
+import Pagination from "@mui/material/Pagination";
 import React, { useEffect, useState } from "react";
 import { GrUpdate } from "react-icons/gr";
 import { MdDeleteSweep } from "react-icons/md";
@@ -10,7 +11,13 @@ const ManageUser = () => {
   const axiosFetch = useAxiosFetch();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
+
+  //  {/* pagination  bộ đếm số */}
   const [users, setUsers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [paginatedData, setPaginatedData] = useState([]);
+  const itemPerPage = 5;
+  const totalpage = Math.ceil(users.length / itemPerPage);
 
   useEffect(() => {
     axiosFetch
@@ -20,7 +27,6 @@ const ManageUser = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axiosSecure.delete(`/delete-user/${id}`);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -31,20 +37,44 @@ const ManageUser = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your Account has been deleted.",
-          icon: "success",
-        });
-        window.location.reload();
+        // Make the delete request only after the user confirms
+        axiosSecure
+          .delete(`/delete-user/${id}`)
+          .then(() => {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your Account has been deleted.",
+              icon: "success",
+            }).then(() => {
+              window.location.reload(); // Reload the page after successful deletion
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            Swal.fire({
+              title: "Error!",
+              text: "Something went wrong. Please try again later.",
+              icon: "error",
+            });
+          });
       }
     });
   };
-  //     .then((res) => {
-  //       alert("User successfully");
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
+
+  useEffect(() => {
+    let lastIndex = page * itemPerPage;
+    const firstIndex = lastIndex - itemPerPage;
+
+    if (lastIndex > users.length) {
+      lastIndex = users.length;
+    }
+    const currentData = users.slice(firstIndex, lastIndex);
+    setPaginatedData(currentData);
+  }, [page, totalpage]);
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
 
   return (
     <div>
@@ -80,7 +110,7 @@ const ManageUser = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {users.map((user, index) => (
+                    {paginatedData.map((user, index) => (
                       <tr
                         key={user._id}
                         className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600"
@@ -125,6 +155,16 @@ const ManageUser = () => {
                 </table>
               </div>
             </div>
+          </div>
+        </div>
+        {/* pagination  bộ đếm số */}
+        <div>
+          <div className="w-full h-full flex justify-center items-center my-10">
+            <Pagination
+              onChange={handleChange}
+              count={totalpage}
+              color="primary"
+            />
           </div>
         </div>
       </div>

@@ -1,21 +1,25 @@
 import axios from "axios";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   AiOutlineLock,
   AiOutlineMail,
   AiOutlinePhone,
-  AiOutlinePicture,
   AiOutlineUser,
 } from "react-icons/ai";
 import { IoLocationOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleLogin from "../components/Social/googleLogin";
+import useAuth from "../hooks/useAuth";
 import { AuthContext } from "../ultilities/providers/AuthProvider";
 
+const KEY = import.meta.env.VITE_IMG_TOKEN;
 const Register = () => {
+  const API_URL = `https://api.imgbb.com/1/upload?key=${KEY}&name=`;
+  const [image, setImage] = useState(null);
   const navigate = useNavigate();
   const { signUp, updateUser, setError } = useContext(AuthContext);
+  const { login, error, loader, setLoader } = useAuth();
   const {
     register,
     handleSubmit,
@@ -38,21 +42,36 @@ const Register = () => {
             address: data.address,
           };
 
+          const formData = new FormData();
+          formData.append("image", image); // "image" là key bắt buộc
+
           if (user.email && user.displayName) {
             return axios
-              .post("http://localhost:3000/new-user", userImp)
-              .then(() => {
-                navigate("/");
-                return "Registrantion Successfully!";
+              .post(API_URL, formData)
+              .then((response) => {
+                const imageUrl = response.data.data.url;
+                const userImp = {
+                  name: user?.displayName,
+                  email: user?.email,
+                  photoUrl: imageUrl,
+                  role: "user",
+                  gender: data.gender,
+                  phone: data.phone,
+                  address: data.address,
+                };
+                return axios.post("http://localhost:3000/new-user", userImp);
               })
-              .catch((err) => {
-                setError(err.code);
-                throw new Error(err);
-              });
+              .then(() => navigate("/"))
+              .catch((error) => console.log(error));
           }
         });
       }
     });
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
   };
 
   const password = watch("password", "");
@@ -145,15 +164,14 @@ const Register = () => {
             </div>
           </div>
 
-          {/* Register PhoneNumber and photoURL  */}
+          {/* Register PhoneNumber and photoURL */}
           <div className="flex items-center gap-5">
-            {/* Phone number  */}
-            <div className="mb-4">
+            {/* Phone number */}
+            <div className="flex-1 mb-4">
               <label
                 htmlFor="phonenumber"
                 className="block text-gray-700 font-bold mb-2"
               >
-                {/* icon phoneNumber  */}
                 <AiOutlinePhone className="inline-block mr-2 mb-1 text-lg" />
                 Phone Number
               </label>
@@ -161,24 +179,23 @@ const Register = () => {
                 type="tel"
                 placeholder="Enter your phone"
                 {...register("phone", { required: true })}
-                className="w-full border-gray-300 border rounded-md py-2 px-4 focus:outline-none focus:ring focus:border-blue-300"
+                className="w-full border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:border-blue-300"
               />
             </div>
-            {/* Confirm photoUrl  */}
-            <div className="mb-4">
+
+            {/* Photo URL */}
+            <div className="flex-1 mb-4">
               <label
-                htmlFor="photoUrl"
+                htmlFor="image"
                 className="block text-gray-700 font-bold mb-2"
               >
-                {/* icon photUrl  */}
-                <AiOutlinePicture className="inline-block mr-2 mb-1 text-lg" />
-                Photo Url
+                Course Thumbnail
               </label>
               <input
-                type="text"
-                placeholder="Enter your photo Url"
-                {...register("photoUrl")}
-                className="w-full border-gray-300 border rounded-md py-2 px-4 focus:outline-none focus:ring focus:border-blue-300"
+                type="file"
+                {...register("image")}
+                onChange={(e) => setImage(e.target.files[0])}
+                className="w-full border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:border-blue-300"
               />
             </div>
           </div>
@@ -224,13 +241,14 @@ const Register = () => {
             </div>
           </div>
 
-          {/* button sign up  */}
+          {/*   button sign up  */}
           <div className="text-center">
             <button
               type="submit"
+              disabled={loader}
               className="bg-secondary hover:bg-red-500 text-white py-2 px-4 rounded-md"
             >
-              Register
+              {loader ? "Registering..." : "Register"}
             </button>
             {errors.confirmpassword && (
               <div className="text-red-500 text-sm w-full mt-1">

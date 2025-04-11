@@ -678,9 +678,29 @@ async function run() {
     app.get("/api/manage-cart", async (req, res) => {
       try {
         // Tìm tất cả các user đã có lớp học trong cart của họ
-        const usersWithClassesInCart = await Cart.find()
-          .populate("userId", "email username") // Ví dụ populate để lấy thông tin người dùng
-          .exec();
+        const usersWithClassesInCart = await database
+          .collection("cart")
+          .aggregate([
+            {
+              $lookup: {
+                from: "users", // collection users
+                localField: "userId",
+                foreignField: "_id",
+                as: "userDetails",
+              },
+            },
+            {
+              $unwind: "$userDetails",
+            },
+            {
+              $project: {
+                "userDetails.email": 1,
+                "userDetails.username": 1,
+                // các field khác bạn cần
+              },
+            },
+          ])
+          .toArray();
 
         res.json(usersWithClassesInCart); // Trả dữ liệu về cho client
       } catch (error) {
@@ -758,7 +778,7 @@ async function run() {
     app.post("/change-password", async (req, res) => {
       try {
         const { email, oldPassword, newPassword } = req.body;
-        console.log("Dữ liệu nhận từ frontend:", req.body);
+        console.log("Data nhận được: ", req.body);
 
         // Kiểm tra xem có tất cả các trường cần thiết không
         if (!email || !oldPassword || !newPassword) {

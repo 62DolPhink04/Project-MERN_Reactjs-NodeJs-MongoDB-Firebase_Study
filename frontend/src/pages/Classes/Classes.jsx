@@ -30,36 +30,69 @@ const Classes = () => {
   // console.log(Classes);
 
   // handle add to cart
-  const handleSelect = (id) => {
-    axiosSecure
-      .get(`/enrolled-classes/${currentUser?.email}`)
-      .then((res) => setErrolledClasses(res.data))
-      .catch((err) => console.log(err));
+  const handleSelect = async (id) => {
     if (!currentUser) {
       alert("Please Login First");
       navigate("/login"); // Chuyển hướng sang trang login
       return;
     }
 
-    axiosSecure
-      .get(`/cart-item/${id}??email=${currentUser?.email}`)
-      .then((res) => {
-        if (res.data.classId === id) {
-          return alert("Already Selected!");
-        } else if (errolledClasses.find((item) => item.Classes._id === id)) {
-          return alert("Already enrolled");
-        } else {
-          const data = {
-            classId: id,
-            useMail: currentUser?.email,
-            data: new Date(),
-          };
-          axiosSecure.post("/add-to-cart", data).then((res) => {
-            alert("Successfully add to cart!");
-            console.log(res.data);
-          });
+    try {
+      // Kiểm tra xem lớp đã được đăng ký chưa
+      const enrolledClassesRes = await axiosSecure.get(
+        `/enrolled-classes/${currentUser?.email}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Đảm bảo gửi token trong header
+          },
         }
+      );
+
+      setErrolledClasses(enrolledClassesRes.data);
+
+      // Kiểm tra xem lớp đã được đăng ký chưa
+      const isEnrolled = enrolledClassesRes.data.find(
+        (item) => item.Classes._id === id
+      );
+      if (isEnrolled) {
+        alert("Already enrolled");
+        return;
+      }
+
+      // Kiểm tra xem lớp đã có trong giỏ hàng chưa
+      const cartItemRes = await axiosSecure.get(
+        `/cart-item/${id}?email=${currentUser?.email}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Đảm bảo gửi token trong header
+          },
+        }
+      );
+
+      if (cartItemRes.data.classId === id) {
+        alert("Already Selected!");
+        return;
+      }
+
+      // Nếu chưa có trong giỏ hàng, tiến hành thêm vào giỏ hàng
+      const data = {
+        classId: id,
+        useMail: currentUser?.email,
+        data: new Date(),
+      };
+
+      const addToCartRes = await axiosSecure.post("/add-to-cart", data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Đảm bảo gửi token trong header
+        },
       });
+
+      alert("Successfully added to cart!");
+      console.log(addToCartRes.data);
+    } catch (err) {
+      console.log(err); // In lỗi nếu có
+      alert("An error occurred while processing your request.");
+    }
   };
   return (
     <div>
