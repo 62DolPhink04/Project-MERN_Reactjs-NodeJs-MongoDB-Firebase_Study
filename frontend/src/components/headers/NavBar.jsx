@@ -170,8 +170,7 @@ const NavBar = () => {
                 <h1 className="text-2xl inline-flex gap-4 items-center font-bold">
                   {siteSettings?.nameWebsite || "Study"}{" "}
                   <img
-                    src="/yoga-logo.png"
-                    alt="yoga logo"
+                    src={siteSettings?.logoImg || "/yoga-logo.png"}
                     className="w-8 h-8"
                   />
                 </h1>
