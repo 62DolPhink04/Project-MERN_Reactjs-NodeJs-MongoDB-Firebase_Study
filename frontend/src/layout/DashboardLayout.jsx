@@ -11,6 +11,7 @@ import { IoSchoolSharp } from "react-icons/io5";
 import {
   MdExplore,
   MdOfflineBolt,
+  MdOutlineSettings,
   MdPayments,
   MdPendingActions,
 } from "react-icons/md";
@@ -49,6 +50,11 @@ const adminNavItems = [
     to: "/dashboard/create-accounts",
     icon: <FaUserPlus className="text-2xl" />,
     label: "Create Account",
+  },
+  {
+    to: "/dashboard/seo-setting",
+    icon: <MdOutlineSettings className="text-2xl" />,
+    label: "Seo Setting",
   },
 ];
 

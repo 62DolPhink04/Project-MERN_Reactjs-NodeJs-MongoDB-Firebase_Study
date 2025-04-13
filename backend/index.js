@@ -46,6 +46,7 @@ async function run() {
     const paymentCollections = database.collection("payment");
     const errolledCollections = database.collection("errolled");
     const appliedCollection = database.collection("applied");
+    const settingSEOCollection = database.collection("seoSettings");
 
     // verify token
     const verifyJWT = (req, res, next) => {
@@ -94,6 +95,36 @@ async function run() {
         return res.status(401).send({ message: "Not Access" });
       }
     };
+
+    // ROUTER setting SEO
+    // Lấy SEO info theo slug
+    // GET tất cả site settings
+    app.get("/site-settings", async (req, res) => {
+      const settings = await settingSEOCollection.findOne();
+      res.json(settings);
+    });
+
+    // PUT cập nhật site settings
+    app.put("/site-settings", async (req, res) => {
+      const updatedData = req.body;
+
+      delete updatedData._id;
+
+      // Cập nhật tài liệu với toán tử $set
+      const settings = await settingSEOCollection.findOneAndUpdate(
+        {}, // Điều kiện tìm tài liệu
+        { $set: updatedData }, // Dùng $set để cập nhật dữ liệu
+        { new: true } // Tùy chọn: trả về tài liệu mới sau khi cập nhật
+      );
+
+      if (!settings) {
+        return res
+          .status(404)
+          .json({ message: "Không tìm thấy tài liệu để cập nhật." });
+      }
+
+      res.json(settings); // Trả lại dữ liệu đã cập nhật
+    });
 
     // routers for users
     app.post("/api/set-token", async (req, res) => {

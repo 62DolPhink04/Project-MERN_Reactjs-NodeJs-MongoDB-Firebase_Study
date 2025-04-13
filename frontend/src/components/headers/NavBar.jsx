@@ -1,5 +1,6 @@
 import { Switch } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
 import { motion } from "framer-motion";
 import React, { useContext, useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
@@ -28,6 +29,8 @@ const theme = createTheme({
 const NavBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [siteSettings, setSiteSettings] = useState(null); // Để lưu trữ dữ liệu từ API
+  const [loading, setLoading] = useState(true); // Để kiểm soát trạng thái loading
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isHome, setIsHome] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
@@ -35,12 +38,36 @@ const NavBar = () => {
   const [isFixed, setIsFixed] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [navBg, setNavBg] = useState("bg-[#15151580]");
-  const { logOut, user } = useContext(AuthContext);
-  const { currentUser } = useUser();
-
+  const { logOut, user } = useContext(AuthContext); // Không gọi trong điều kiện
+  const { currentUser } = useUser(); // Không gọi trong điều kiện
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
+  // set title
+
+  useEffect(() => {
+    // Lấy dữ liệu từ API khi component được render lần đầu tiên
+    axios
+      .get("http://localhost:3000/site-settings")
+      .then((response) => {
+        setSiteSettings(response.data); // Cập nhật dữ liệu vào state
+        setLoading(false); // Thay đổi trạng thái loading sau khi có dữ liệu
+      })
+      .catch((error) => {
+        console.error("Có lỗi khi lấy dữ liệu:", error);
+        setLoading(false); // Dù có lỗi cũng phải set loading là false
+      });
+  }, []); // []
+  console.log(siteSettings);
+
+  // if (loading) {
+  //   return <div>Đang tải dữ liệu...</div>;
+  // }
+
+  // if (!siteSettings) {
+  //   return <div>Lỗi khi lấy dữ liệu.</div>;
+  // }
 
   useEffect(() => {
     const dartClass = "dark";
@@ -141,7 +168,7 @@ const NavBar = () => {
             >
               <div>
                 <h1 className="text-2xl inline-flex gap-4 items-center font-bold">
-                  Study{" "}
+                  {siteSettings?.nameWebsite || "Study"}{" "}
                   <img
                     src="/yoga-logo.png"
                     alt="yoga logo"
@@ -149,7 +176,7 @@ const NavBar = () => {
                   />
                 </h1>
                 <p className="font-bold text-[13px] tracking-[8px]">
-                  Quick Explore
+                  {siteSettings?.titleWebsite || "Quick Explore"}{" "}
                 </p>
               </div>
             </div>

@@ -12,6 +12,7 @@ import CreateAccount from "../pages/Dashboard/Admin/CreateAccount";
 import ManageApplications from "../pages/Dashboard/Admin/ManageApplications";
 import ManageClass from "../pages/Dashboard/Admin/ManageClass";
 import ManageUser from "../pages/Dashboard/Admin/ManageUser";
+import SeoSetting from "../pages/Dashboard/Admin/SeoSetting";
 import UpdateAccount from "../pages/Dashboard/Admin/UpdateAccount";
 import ChangePass from "../pages/Dashboard/Dashboard_shared/ChangePass";
 import ProFile from "../pages/Dashboard/Dashboard_shared/Profile";
@@ -168,6 +169,10 @@ export const router = createBrowserRouter([
       {
         path: "create-accounts",
         element: <CreateAccount />,
+      },
+      {
+        path: "seo-setting",
+        element: <SeoSetting />,
       },
 
       // router shared

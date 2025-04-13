@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import useAxiosFetch from "../../../hooks/useAxiosFetch";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useAuth } from "../../../ultilities/providers/AuthProvider";
 
@@ -14,10 +13,7 @@ const UpdateAccount = () => {
 
   const { user } = useAuth();
   const userCredentials = useLoaderData();
-  //   console.log(userCredentials);
-  //   console.log(user);
   const axiosSecure = useAxiosSecure();
-  const axiosFetch = useAxiosFetch();
   const navigate = useNavigate();
 
   const handleFormSubmit = async (e) => {
@@ -36,11 +32,18 @@ const UpdateAccount = () => {
       let imageUrl = userCredentials.photoUrl; // giữ ảnh cũ nếu không đổi
 
       if (image) {
+        // Tạo toast với thanh tiến trình
+        const toastId = toast.loading("Uploading image...", {
+          duration: Infinity, // Tiếp tục cho đến khi hoàn thành
+        });
+
         const imageFormData = new FormData();
         imageFormData.append("image", image);
 
         const response = await axios.post(API_URL, imageFormData);
         imageUrl = response.data.data.url;
+
+        toast.success("Image uploaded successfully!", { id: toastId });
       }
 
       updateData.photoUrl = imageUrl;
@@ -52,16 +55,18 @@ const UpdateAccount = () => {
       );
 
       if (res.data.modifiedCount > 0) {
-        toast.success("Update Successfully!");
+        toast.success("Account updated successfully!");
         navigate("/dashboard/manage-users");
+      } else {
+        toast.error("Failed to update account. Please change data.");
       }
     } catch (err) {
       console.error("Error updating user:", err);
+      toast.error("Error updating account.");
     }
   };
-  // handle Cancel
+
   const handleCancel = () => {
-    console.log("Navigating to /dashboard/manage-users");
     navigate("/dashboard/manage-users");
   };
 
@@ -69,6 +74,7 @@ const UpdateAccount = () => {
     const file = e.target.files[0];
     setImage(file);
   };
+
   return (
     <div>
       <h1 className="text-center text-4xl font-bold mt-5">
@@ -95,9 +101,7 @@ const UpdateAccount = () => {
                       id="name"
                       className="w-full rounded-lg mt-3 border outline-none border-secondary p-3 text-sm"
                       placeholder="Your name"
-                      defaultValue={
-                        userCredentials?.name ? userCredentials?.name : ""
-                      }
+                      defaultValue={userCredentials?.name || ""}
                     />
                   </div>
                   <div>
@@ -110,9 +114,7 @@ const UpdateAccount = () => {
                       id="phone"
                       className="w-full rounded-lg mt-3 border outline-none border-secondary p-3 text-sm"
                       placeholder="Phone number"
-                      defaultValue={
-                        userCredentials?.phone ? userCredentials?.phone : ""
-                      }
+                      defaultValue={userCredentials?.phone || ""}
                     />
                   </div>
                 </div>
@@ -126,7 +128,7 @@ const UpdateAccount = () => {
                       name="email"
                       id="email"
                       className="w-full mt-2 h-12 rounded-lg border border-secondary p-3 text-sm"
-                      defaultValue={userCredentials?.email}
+                      defaultValue={userCredentials?.email || ""}
                     />
                   </div>
                   <div>
@@ -155,7 +157,7 @@ const UpdateAccount = () => {
                       id="address"
                       className="w-full mt-2 h-12 rounded-lg border border-secondary p-3 text-sm"
                       placeholder="Enter address"
-                      defaultValue={userCredentials?.address}
+                      defaultValue={userCredentials?.address || ""}
                     />
                   </div>
                   <div>
@@ -164,8 +166,7 @@ const UpdateAccount = () => {
                     </label>
                     <input
                       type="file"
-                      // {...Register("image")}
-                      onChange={(e) => setImage(e.target.files[0])}
+                      onChange={handleImageChange}
                       className="w-full border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring focus:border-blue-300"
                     />
                   </div>
@@ -176,20 +177,16 @@ const UpdateAccount = () => {
                     <input
                       className="peer sr-only"
                       type="radio"
-                      name="option"
+                      name="role"
                       id="option1"
                       value="user"
-                      defaultChecked={
-                        userCredentials?.role === "user" ? true : false
-                      }
-                      tabIndex="-1"
+                      defaultChecked={userCredentials?.role === "user"}
                     />
                     <label
                       htmlFor="option1"
                       className="block w-full rounded-lg border border-secondary p-3 peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white"
-                      tabIndex="0"
                     >
-                      <span className="text-sm font-medium">User</span>
+                      User
                     </label>
                   </div>
 
@@ -197,20 +194,16 @@ const UpdateAccount = () => {
                     <input
                       className="peer sr-only"
                       type="radio"
-                      name="option"
+                      name="role"
                       id="option2"
                       value="admin"
-                      defaultChecked={
-                        userCredentials?.role === "admin" ? true : false
-                      }
-                      tabIndex="-1"
+                      defaultChecked={userCredentials?.role === "admin"}
                     />
                     <label
                       htmlFor="option2"
                       className="block w-full rounded-lg border border-secondary p-3 peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white"
-                      tabIndex="0"
                     >
-                      <span className="text-sm font-medium">Admin</span>
+                      Admin
                     </label>
                   </div>
 
@@ -218,49 +211,43 @@ const UpdateAccount = () => {
                     <input
                       className="peer sr-only"
                       type="radio"
-                      name="option"
+                      name="role"
                       id="option3"
                       value="instructor"
-                      defaultChecked={
-                        userCredentials?.role === "instructor" ? true : false
-                      }
-                      tabIndex="-1"
+                      defaultChecked={userCredentials?.role === "instructor"}
                     />
                     <label
                       htmlFor="option3"
                       className="block w-full rounded-lg border border-secondary p-3 peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white"
-                      tabIndex="0"
                     >
-                      <span className="text-sm font-medium">Instructor</span>
+                      Instructor
                     </label>
                   </div>
                 </div>
                 <div>
-                  <label className="sr-only" htmlFor="message">
+                  <label htmlFor="message" className="sr-only">
                     About
                   </label>
                   <textarea
+                    name="about"
+                    id="message"
                     className="w-full resize-none rounded-lg border-lg border-secondary border outline-none p-3 text-sm"
                     placeholder="About user"
                     rows="4"
-                    defaultValue={
-                      userCredentials?.about ? userCredentials?.about : ""
-                    }
-                    name="about"
-                    id="message"
+                    defaultValue={userCredentials?.about || ""}
                   ></textarea>
                 </div>
                 <div className="mt-4 flex space-x-6 justify-center">
                   <button
                     onClick={handleCancel}
-                    type="cancel"
-                    className="inline-block w-full rounded-lg bg-red-500 px-5 py-3 font-medium text-white sm:w-auto "
+                    type="button"
+                    className="inline-block w-full rounded-lg bg-red-500 px-5 py-3 font-medium text-white sm:w-auto"
                   >
-                    CanCel
+                    Cancel
                   </button>
                   <button
                     type="submit"
-                    className="inline-block w-full rounded-lg bg-secondary px-5 py-3 font-medium text-white sm:w-auto "
+                    className="inline-block w-full rounded-lg bg-secondary px-5 py-3 font-medium text-white sm:w-auto"
                   >
                     Update Account
                   </button>
