@@ -1,4 +1,5 @@
 import { Transition } from "@headlessui/react";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,6 +16,31 @@ const Classes = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
   const axiosFetch = useAxiosFetch();
   const axiosSecure = useAxiosSecure();
+
+  const [siteSettings, setSiteSettings] = useState(null); // Để lưu trữ dữ liệu từ API
+  const [loading, setLoading] = useState(true); // Để kiểm soát trạng thái loading
+
+  useEffect(() => {
+    // Lấy dữ liệu từ API khi component được render lần đầu tiên
+    axios
+      .get("http://localhost:3000/site-settings")
+      .then((response) => {
+        setSiteSettings(response.data); // Cập nhật dữ liệu vào state
+        setLoading(false); // Thay đổi trạng thái loading sau khi có dữ liệu
+      })
+      .catch((error) => {
+        console.error("Có lỗi khi lấy dữ liệu:", error);
+        setLoading(false); // Dù có lỗi cũng phải set loading là false
+      });
+  }, []); // []
+
+  // if (loading) {
+  //   return <div>Đang tải dữ liệu...</div>;
+  // }
+
+  // if (!siteSettings) {
+  //   return <div>Lỗi khi lấy dữ liệu.</div>;
+  // }
 
   // const { user } = useContext(AuthProvider);
   // console.log(user);
@@ -113,6 +139,11 @@ const Classes = () => {
         <h1 className="text-4xl font-bold text-center text-secondary">
           Classes
         </h1>
+      </div>
+      <div className="w-[40%] text-center mx-auto my-4">
+        <p className="text-gray-500">
+          {siteSettings?.titlePopularClasses || "Wellcome to back Classes"}{" "}
+        </p>
       </div>
       {/* set numbers items layout  */}
       <div className="my-16 w-[90%] mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-8 ">

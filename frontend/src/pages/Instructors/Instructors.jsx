@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import img from "../../assets/home/girl.jpg";
 import useAxiosFetch from "../../hooks/useAxiosFetch";
@@ -5,6 +6,23 @@ import useAxiosFetch from "../../hooks/useAxiosFetch";
 const Instructors = () => {
   const [instructors, setInstructors] = useState([]);
   const axiosFetch = useAxiosFetch();
+
+  const [siteSettings, setSiteSettings] = useState(null); // Để lưu trữ dữ liệu từ API
+  const [loading, setLoading] = useState(true); // Để kiểm soát trạng thái loading
+
+  useEffect(() => {
+    // Lấy dữ liệu từ API khi component được render lần đầu tiên
+    axios
+      .get("http://localhost:3000/site-settings")
+      .then((response) => {
+        setSiteSettings(response.data); // Cập nhật dữ liệu vào state
+        setLoading(false); // Thay đổi trạng thái loading sau khi có dữ liệu
+      })
+      .catch((error) => {
+        console.error("Có lỗi khi lấy dữ liệu:", error);
+        setLoading(false); // Dù có lỗi cũng phải set loading là false
+      });
+  }, []);
 
   useEffect(() => {
     axiosFetch
@@ -24,8 +42,8 @@ const Instructors = () => {
       </h1>
       <div className="w-[40%] text-center mx-auto my-4">
         <p className="text-gray-500">
-          Our best instructors are experts in their fields, dedicated to guiding
-          you every step of the way{" "}
+          {siteSettings?.titlePopularInstructors ||
+            "Wellcome to back Instructor"}{" "}
         </p>
       </div>
 

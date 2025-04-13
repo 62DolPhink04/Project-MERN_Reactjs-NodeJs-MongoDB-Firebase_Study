@@ -60,7 +60,7 @@ function SiteSettingsForm() {
   };
 
   return (
-    <div className="flex justify-center  min-h-screen bg-gray-100 p-8">
+    <div className="flex justify-center hover:border-secondary  min-h-screen bg-gray-100 p-8">
       <div className=" max-w-4xl bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold    mb-6">
           Configuration <span className="text-secondary">Website</span>
@@ -69,13 +69,13 @@ function SiteSettingsForm() {
           {/* Row nameWebsite + titleWebsite */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block mb-1 font-medium ">Name Website</label>
+              <label className="block mb-1 font-medium  ">Name Website</label>
               <input
                 type="text"
                 name="nameWebsite"
                 value={form.nameWebsite}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
             <div>
@@ -85,7 +85,7 @@ function SiteSettingsForm() {
                 name="titleWebsite"
                 value={form.titleWebsite}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
           </div>
@@ -99,7 +99,7 @@ function SiteSettingsForm() {
                 name="logoImg"
                 value={form.logoImg}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
             <div>
@@ -109,7 +109,7 @@ function SiteSettingsForm() {
                 name="imgBanner1"
                 value={form.imgBanner1}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
           </div>
@@ -124,7 +124,7 @@ function SiteSettingsForm() {
                 name="imgBanner2"
                 value={form.imgBanner2}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
             <div>
@@ -134,7 +134,7 @@ function SiteSettingsForm() {
                 name="h3Banner1"
                 value={form.h3Banner1}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
           </div>
@@ -147,7 +147,7 @@ function SiteSettingsForm() {
                 name="h3Banner2"
                 value={form.h3Banner2}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
             <div>
@@ -157,7 +157,7 @@ function SiteSettingsForm() {
                 name="pBanner1"
                 value={form.pBanner1}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
           </div>
@@ -170,7 +170,7 @@ function SiteSettingsForm() {
                 name="pBanner2"
                 value={form.pBanner2}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
             <div>
@@ -180,7 +180,7 @@ function SiteSettingsForm() {
                 name="h1Banner1"
                 value={form.h1Banner1}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
           </div>
@@ -193,7 +193,7 @@ function SiteSettingsForm() {
                 name="h1Banner2"
                 value={form.h1Banner2}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
             <div>
@@ -205,7 +205,7 @@ function SiteSettingsForm() {
                 name="imgGallary1"
                 value={form.imgGallary1}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
           </div>
@@ -220,7 +220,7 @@ function SiteSettingsForm() {
                 name="imgGallary2"
                 value={form.imgGallary2}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
             <div>
@@ -232,7 +232,7 @@ function SiteSettingsForm() {
                 name="imgGallary3"
                 value={form.imgGallary3}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
           </div>
@@ -247,7 +247,7 @@ function SiteSettingsForm() {
                 name="imgGallary4"
                 value={form.imgGallary4}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
             <div>
@@ -259,7 +259,7 @@ function SiteSettingsForm() {
                 name="imgGallary5"
                 value={form.imgGallary5}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
           </div>
@@ -274,7 +274,7 @@ function SiteSettingsForm() {
                 name="titlePopularClasses"
                 value={form.titlePopularClasses}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
             <div>
@@ -286,14 +286,14 @@ function SiteSettingsForm() {
                 name="titlePopularInstructors"
                 value={form.titlePopularInstructors}
                 onChange={handleChange}
-                className="w-full border rounded px-3 py-2"
+                className="w-full border rounded px-3 py-2 hover:border-secondary hover:shadow-lg"
               />
             </div>
           </div>
 
           <button
             type="submit"
-            className="mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 w-full"
+            className="mt-6 bg-blue-400 text-white px-6 py-2 rounded hover:bg-blue-700 w-full"
           >
             Save Settings
           </button>
